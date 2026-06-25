@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modelo 3D — C.E.A. "Catavi"</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav>
+    <div class="brand"><span class="brand-mark">CEA</span> C.E.A. "Catavi"</div>
+    <div class="nav-links">
+      <a href="index.html">Inicio</a>
+      <a href="historia.html">Historia &amp; Programas</a>
+      <a href="modelo3d.html" class="active">Modelo 3D</a>
+    </div>
+  </nav>
+
+  <section class="modelo-hero" id="canvas-frame">
+
+    <!-- El modelo vive de fondo, a pantalla completa dentro de esta sección -->
+    <div class="modelo-canvas-holder" id="canvas-holder"></div>
+
+    <div class="loading-screen" id="loading-screen">
+      <div class="spinner"></div>
+      <span class="lbl" id="loading-label">Cargando modelo… <span class="pct" id="loading-pct">0%</span></span>
+    </div>
+
+    <!-- Texto delante del modelo -->
+    <div class="modelo-hero-content">
+      <span class="tag-pill"><span class="dot"></span> Modelo 3D en vivo</span>
+      <h1 style="margin-top:1.2rem;">El edificio, <span class="accent">navegable</span> desde cualquier ángulo</h1>
+      <p class="sub">
+        Modelo 3D del C.E.A. "Catavi" modelado en Blender a partir de fotografías propias del edificio,
+        y exportado a este sitio con Three.js.
+      </p>
+    </div>
+
+    <!-- Pistas + herramientas, abajo del visor -->
+    <div class="modelo-bottom-row">
+      <div class="canvas-controls-hint">
+        <span><b>Arrastrar</b> — rotar</span>
+        <span><b>Rueda</b> — zoom</span>
+        <span><b>Recorrer</b> — vista automática</span>
+      </div>
+
+      <div class="canvas-toolbar">
+
+        <div class="toolbar-wrap">
+          <button class="tool-btn icon-only" id="btn-luces" title="Iluminación" aria-label="Iluminación">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.5 1 1.2 1 2v.5h6v-.5c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg>
+          </button>
+
+          <div class="luz-panel" id="luz-panel">
+            <span class="titulo">Control de luces</span>
+            <div class="luz-row">
+              <label><span>Luz ambiental</span><span id="val-ambiental">60%</span></label>
+              <input type="range" id="slider-ambiental" min="0" max="150" value="60">
+            </div>
+            <div class="luz-row">
+              <label><span>Luz direccional (sol)</span><span id="val-direccional">100%</span></label>
+              <input type="range" id="slider-direccional" min="0" max="200" value="100">
+            </div>
+            <div class="luz-row">
+              <label><span>Luz puntual (cálida)</span><span id="val-puntual">60%</span></label>
+              <input type="range" id="slider-puntual" min="0" max="200" value="60">
+            </div>
+          </div>
+        </div>
+
+        <button class="tool-btn" id="btn-recorrer" title="Recorrer el modelo automáticamente">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 3v6h6"/></svg>
+          Recorrer
+        </button>
+
+        <button class="tool-btn icon-only" id="btn-zoom-out" title="Alejar" aria-label="Alejar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35M8 11h6"/></svg>
+        </button>
+        <button class="tool-btn icon-only" id="btn-zoom-in" title="Acercar" aria-label="Acercar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35M11 8v6M8 11h6"/></svg>
+        </button>
+        <button class="tool-btn icon-only" id="btn-reset" title="Restablecer vista" aria-label="Restablecer vista">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5"/></svg>
+        </button>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="modelo3d-wrap">
+    <div class="modelo-info">
+      <div class="item">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3 6 6 .9-4.5 4.3 1 6.3L12 16.5 6.5 19.5l1-6.3L3 8.9 9 8z"/></svg></div>
+        <div><span class="k">Software de modelado</span><span class="v">Blender</span></div>
+      </div>
+      <div class="item">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2 2 7l10 5 10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <div><span class="k">Motor de visualización</span><span class="v">Three.js (WebGL)</span></div>
+      </div>
+      <div class="item">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><path d="M14 2v5h5"/></svg></div>
+        <div><span class="k">Formato del modelo</span><span class="v">.FBX</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="next-page">
+    <div>
+      <span class="tag">Volver</span>
+      <h3>Conoce la historia del C.E.A. "Catavi"</h3>
+    </div>
+    <a class="next-link" href="historia.html">
+      Ver historia &amp; programas
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+
+  <footer>
+    <span>© C.E.A. "Catavi" — Universidad Nacional "Siglo XX"</span>
+    <span>Modelo 3D: Blender + Three.js</span>
+  </footer>
+
+  <!-- Three.js y dependencias del cargador FBX -->
+  <script src="js/libs/three.js"></script>
+  <script src="js/libs/fflate.min.js"></script>
+  <script src="js/libs/FBXLoader.js"></script>
+
+  <!-- Lógica del visor 3D -->
+  <script src="js/modelo3d.js"></script>
+
+</body>
+</html>
