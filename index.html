@@ -1,20 +1,81 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C.E.A. "Catavi" — Centro de Educación Alternativa</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C.E.A. "Catavi" — Centro de Educación Alternativa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    #fondo-3d {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    #fondo-3d canvas {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .scrim-3d {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(10, 14, 20, .4) 0%, rgba(10, 14, 20, .08) 40%, rgba(10, 14, 20, .96) 86%);
+    }
+
+    nav.nav-hero {
+      position: fixed !important;
+      z-index: 100 !important;
+      pointer-events: auto !important;
+    }
+
+    nav.nav-hero a {
+      pointer-events: auto !important;
+    }
+
+    .hero {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-bg {
+      display: none;
+    }
+
+    .hero-scrim {
+      display: none;
+    }
+
+    .datastrip,
+    .intro,
+    footer {
+      position: relative;
+      z-index: 1;
+      background: rgba(10, 14, 20, 0.82);
+      backdrop-filter: blur(14px);
+    }
+  </style>
 </head>
+
 <body>
 
+  <div id="fondo-3d"></div>
+  <div class="scrim-3d"></div>
+
   <nav class="nav-hero">
-    <div class="brand">
-      <span class="brand-mark">CEA</span>
-      C.E.A. "Catavi"
-    </div>
+    <div class="brand"><span class="brand-mark">CEA</span> C.E.A. "Catavi"</div>
     <div class="nav-links">
       <a href="index.html" class="active">Inicio</a>
       <a href="historia.html">Historia &amp; Programas</a>
@@ -23,9 +84,6 @@
   </nav>
 
   <section class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-scrim"></div>
-
     <div class="hero-content">
       <div class="eyebrow"><span class="dash"></span> Llallagua · Potosí · Bolivia</div>
       <h1 class="title">Centro de Educación<br><span class="accent">Alternativa</span> Catavi</h1>
@@ -33,13 +91,12 @@
         Formación Técnica Humanística para jóvenes y adultos del Norte de Potosí.
         Un espacio donde el oficio se aprende con las manos y el futuro se construye con conocimientos.
       </p>
-
       <div class="scroll-cue"><span class="line"></span> Desplázate para conocer el centro</div>
-
       <div class="hero-cta-row">
-        <a class="btn btn-primary" href="historia.html">
-          Historia &amp; Programas
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <a class="btn btn-primary" href="historia.html">Historia &amp; Programas
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
         </a>
         <a class="btn btn-ghost" href="modelo3d.html">Ver el edificio en 3D</a>
       </div>
@@ -47,13 +104,11 @@
   </section>
 
   <div class="datastrip">
-    <div class="cell"><span class="num">1972</span><span class="lbl">Año de fundación del centro</span></div>
     <div class="cell"><span class="num">8</span><span class="lbl">Especialidades técnicas</span></div>
     <div class="cell"><span class="num">3D</span><span class="lbl">Modelo navegable del edificio</span></div>
   </div>
 
   <section class="intro">
-
     <div class="intro-fact">
       <div class="intro-label"><span class="dash"></span>En cifras</div>
       <ul class="fact-list">
@@ -63,39 +118,27 @@
         <li><span class="fk">Bodas de Oro (Senado de Bolivia)</span><span class="fv">2022</span></li>
       </ul>
     </div>
-
     <div>
       <h2>Un edificio levantado sobre la ladera, mirando hacia el futuro de Catavi.</h2>
       <div class="intro-body">
-        <p>
-          El <strong>C.E.A. "Catavi"</strong> se distingue por su fachada ocre de tres niveles y la estructura
-          de vidrio que corona su bloque central — una claraboya que ilumina las escaleras interiores
-          y que de noche se enciende como un faro sobre el barrio.
-        </p>
-        <p>
-          Este sitio reconstruye el edificio en tres dimensiones, tal como se ve desde la calle:
-          sus bloques unidos, el muro de ladrillo que lo resguarda, y las ventanas
-          que durante el día reflejan el cielo de Potosí.
-        </p>
+        <p>El <strong>C.E.A. "Catavi"</strong> se distingue por su fachada ocre de tres niveles y la estructura de
+          vidrio que corona su bloque central — una claraboya que ilumina las escaleras interiores y que de noche se
+          enciende como un faro sobre el barrio.</p>
+        <p>Este sitio reconstruye el edificio en tres dimensiones, tal como se ve desde la calle: sus bloques unidos, el
+          muro de ladrillo que lo resguarda, y las ventanas que durante el día reflejan el cielo de Potosí.</p>
       </div>
     </div>
   </section>
 
-  <div class="next-page">
-    <div>
-      <span class="tag">Siguiente</span>
-      <h3>Historia, talleres y programas</h3>
-    </div>
-    <a class="next-link" href="historia.html">
-      Continuar
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-    </a>
-  </div>
-
   <footer>
-    <span>© C.E.A. "Catavi" — Universidad Nacional "Siglo XX"</span>
-    <span>Programación Gráfica · Three.js</span>
+    <span>© C.E.A. "Catavi" — Llallagua, Potosí, Bolivia</span>
+    <span>Sitio Web 3D — Blender · Three.js · WebGL</span>
   </footer>
 
+  <script src="js/libs/three.js"></script>
+  <script src="js/libs/fflate.min.js"></script>
+  <script src="js/libs/FBXLoader.js"></script>
+  <script src="js/fondo3d.js"></script>
 </body>
+
 </html>

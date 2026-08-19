@@ -1,392 +1,231 @@
-// ════════════════════════════════════════════════════════════
-// MODELO3D.JS — Visor 3D del edificio C.E.A. "Catavi"
-// El modelo se ve de frente y quieto al entrar a la página.
-// Si el usuario no interactúa por un momento, empieza a rotar solo.
-// Arrastrar = rotar manualmente · Rueda = zoom · Botón "Recorrer" = forzar el giro.
-// ════════════════════════════════════════════════════════════
+var radioV = 30, anguloHV = 0, anguloVV = 0.25, objetivoV;
+var arrastrando = false, ultimoX = 0, ultimoY = 0;
+var autoRotarV = false, idleTimerV = null, IDLE_MS = 20000;
+var enRecorrido = false, puntoActual = 0, progresoTour = 0;
+var puntosTour = [
+  { pos: { x: 0, y: 6, z: 30 }, obj: { x: 0, y: 4, z: 0 } },
+  { pos: { x: 28, y: 8, z: 18 }, obj: { x: 0, y: 4, z: 0 } },
+  { pos: { x: 32, y: 5, z: 0 }, obj: { x: 0, y: 4, z: 0 } },
+  { pos: { x: 18, y: 12, z: -22 }, obj: { x: 0, y: 4, z: 0 } },
+  { pos: { x: -28, y: 8, z: 18 }, obj: { x: 0, y: 4, z: 0 } },
+  { pos: { x: 0, y: 22, z: 12 }, obj: { x: 0, y: 0, z: 0 } }
+];
+var modoExplorador = false;
+var teclas = { w: false, a: false, s: false, d: false };
+var exploradorPos, exploradorYaw = 0, exploradorPitch = 0;
+var VEL_EXP = 0.12;
+var controlesIniciados = false;
 
-var scene, camera, renderer;
-var modeloEdificio;
-var canvasFrame, canvasHolder, canvasEl;
+var modos = {
+  dia: { cielo: 0x87CEEB, niebla: 0x9ad5e8, ambColor: 0xfff0e0, ambInt: 0.70, dirColor: 0xfff8ee, dirInt: 1.20, punColor: 0xFFEEAA, punInt: 0.20, sAmb: 70, sDir: 120, sPun: 20 },
+  atardecer: { cielo: 0xd45c1a, niebla: 0xb04010, ambColor: 0xff8844, ambInt: 0.40, dirColor: 0xff5500, dirInt: 0.60, punColor: 0xFF9944, punInt: 1.20, sAmb: 40, sDir: 60, sPun: 120 },
+  noche: { cielo: 0x0a0e14, niebla: 0x0a0e14, ambColor: 0x223355, ambInt: 0.12, dirColor: 0x334488, dirInt: 0.15, punColor: 0xFFCC77, punInt: 3.00, sAmb: 12, sDir: 15, sPun: 150 }
+};
 
-// Luces (guardadas en variables para poder controlarlas con los sliders)
-var luzAmbiental, luzDireccional, luzPuntual;
+function actualizarCamaraVisor() {
+  if (modoExplorador) actualizarExplorador();
+  else if (enRecorrido) actualizarRecorrido();
+  else if (autoRotarV) { anguloHV += 0.0022; updateCam(); }
+}
 
-// Cámara orbital "casera" (sin depender de OrbitControls.js)
-var radio = 30;
-var anguloH = 0;          // 0 = vista totalmente de frente
-var anguloV = 0.32;       // leve inclinación hacia abajo
-var objetivo;             // se calcula al cargar el modelo (centro real del edificio)
-
-var arrastrando = false;
-var ultimoX = 0, ultimoY = 0;
-
-// Auto-rotación por inactividad
-var autoRotar = false;
-var idleTimer = null;
-var ESPERA_INACTIVIDAD_MS = 6000;
-
-
-// ════════════════════════════════════════════════════════════
-// INIT
-// ════════════════════════════════════════════════════════════
-function init() {
-
-  canvasFrame = document.getElementById('canvas-frame');
-  canvasHolder = document.getElementById('canvas-holder');
-
-  objetivo = new THREE.Vector3(0, 4, 0);
-
-  scene = new THREE.Scene();
-  scene.background = null; // transparente: se ve el degradé del CSS detrás
-  scene.fog = new THREE.Fog(0x0a0e14, 35, 95);
-
-  camera = new THREE.PerspectiveCamera(
-    45,
-    canvasFrame.clientWidth / canvasFrame.clientHeight,
-    0.1,
-    1000
+function updateCam() {
+  if (!objetivoV) return;
+  camera3d.position.set(
+    objetivoV.x + radioV * Math.sin(anguloHV) * Math.cos(anguloVV),
+    objetivoV.y + radioV * Math.sin(anguloVV),
+    objetivoV.z + radioV * Math.cos(anguloHV) * Math.cos(anguloVV)
   );
-  actualizarCamara();
-
-  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setSize(canvasFrame.clientWidth, canvasFrame.clientHeight);
-  canvasHolder.appendChild(renderer.domElement);
-  canvasEl = renderer.domElement;
-
-  put_Piso();
-  put_ModeloCEA();
-  put_LuzAmbiental();
-  put_LuzDireccional();
-  put_LuzPuntual();
-
-  initControles();
-  initPanelLuces();
-  reiniciarTemporizadorInactividad();
-
-  window.addEventListener('resize', alRedimensionar);
-
-  animate();
+  camera3d.lookAt(objetivoV);
 }
 
-
-// ════════════════════════════════════════════════════════════
-// PISO
-// ════════════════════════════════════════════════════════════
-function put_Piso() {
-  const geometry = new THREE.PlaneGeometry(70, 70);
-  const material = new THREE.MeshLambertMaterial({ color: 0x9B8B6E, transparent: true, opacity: 0.85 });
-  const piso = new THREE.Mesh(geometry, material);
-  piso.rotation.x = -Math.PI / 2;
-  scene.add(piso);
-
-  const grid = new THREE.GridHelper(70, 35, 0x3a4458, 0x222a38);
-  grid.position.y = 0.01;
-  scene.add(grid);
+function entrarVisor(iniciarTour) {
+  visorActivo = true;
+  objetivoV = objetivoFondo ? objetivoFondo.clone() : new THREE.Vector3(0, 4, 0);
+  anguloHV = anguloFondo;
+  radioV = 30;
+  document.getElementById('fondo-3d').style.pointerEvents = 'auto';
+  document.querySelector('nav').style.opacity = '0';
+  document.querySelector('nav').style.pointerEvents = 'none';
+  var intro = document.getElementById('vista-intro');
+  intro.style.opacity = '0';
+  setTimeout(function () {
+    intro.style.display = 'none';
+    var ctrl = document.getElementById('visor-controles');
+    var btnS = document.getElementById('btn-salir-visor');
+    ctrl.style.display = 'flex';
+    btnS.style.display = 'flex';
+    setTimeout(function () { ctrl.style.opacity = '1'; btnS.style.opacity = '1'; }, 30);
+  }, 400);
+  if (!controlesIniciados) { controlesIniciados = true; initControlesVisor(); }
+  aplicarModo('dia');
+  if (iniciarTour) setTimeout(iniciarRecorrido, 500);
+  else reiniciarIdleV();
 }
 
+function salirVisor() {
+  if (modoExplorador) salirExplorador();
+  enRecorrido = false; autoRotarV = false; clearTimeout(idleTimerV);
+  anguloFondo = anguloHV; visorActivo = false;
+  document.getElementById('fondo-3d').style.pointerEvents = 'none';
+  document.querySelector('nav').style.opacity = '1';
+  document.querySelector('nav').style.pointerEvents = 'auto';
+  var ctrl = document.getElementById('visor-controles');
+  var btnS = document.getElementById('btn-salir-visor');
+  ctrl.style.opacity = '0'; btnS.style.opacity = '0';
+  setTimeout(function () {
+    ctrl.style.display = 'none'; btnS.style.display = 'none';
+    var intro = document.getElementById('vista-intro');
+    intro.style.display = 'flex';
+    setTimeout(function () { intro.style.opacity = '1'; }, 30);
+  }, 400);
+}
 
-// ════════════════════════════════════════════════════════════
-// CARGAR EL MODELO DE BLENDER (.fbx)
-// ════════════════════════════════════════════════════════════
-function put_ModeloCEA() {
+function aplicarModo(nombre) {
+  var m = modos[nombre];
+  scene3d.background = new THREE.Color(m.cielo);
+  scene3d.fog.color.set(m.niebla);
+  luzAmb3d.color.set(m.ambColor); luzAmb3d.intensity = m.ambInt;
+  luzDir3d.color.set(m.dirColor); luzDir3d.intensity = m.dirInt;
+  luzPun3d.color.set(m.punColor); luzPun3d.intensity = m.punInt;
+  var sA = document.getElementById('slider-ambiental');
+  var sD = document.getElementById('slider-direccional');
+  var sP = document.getElementById('slider-puntual');
+  if (sA) { sA.value = m.sAmb; document.getElementById('val-ambiental').textContent = m.sAmb + '%'; }
+  if (sD) { sD.value = m.sDir; document.getElementById('val-direccional').textContent = m.sDir + '%'; }
+  if (sP) { sP.value = m.sPun; document.getElementById('val-puntual').textContent = m.sPun + '%'; }
+  document.querySelectorAll('.btn-modo').forEach(function (b) { b.classList.remove('is-active'); });
+  var ba = document.getElementById('btn-modo-' + nombre);
+  if (ba) ba.classList.add('is-active');
+}
 
-  const loader = new THREE.FBXLoader();
+function lerp(a, b, t) { return a + (b - a) * t; }
 
-  loader.load(
+function iniciarRecorrido() {
+  enRecorrido = true; autoRotarV = false; puntoActual = 0; progresoTour = 0; clearTimeout(idleTimerV);
+  var btn = document.getElementById('btn-tour');
+  if (btn) { btn.classList.add('is-active'); btn.textContent = '⏹ Detener'; }
+}
 
-    'modelos/CEA_Catavi.fbx',
+function detenerRecorrido() {
+  enRecorrido = false;
+  var btn = document.getElementById('btn-tour');
+  if (btn) { btn.classList.remove('is-active'); btn.textContent = '🎬 Recorrido'; }
+  reiniciarIdleV();
+}
 
-    function (objeto) {
+function actualizarRecorrido() {
+  var desde = puntosTour[puntoActual];
+  var hasta = puntosTour[(puntoActual + 1) % puntosTour.length];
+  progresoTour += 0.004;
+  if (progresoTour >= 1) { progresoTour = 0; puntoActual = (puntoActual + 1) % puntosTour.length; }
+  var t = progresoTour * progresoTour * (3 - 2 * progresoTour);
+  camera3d.position.set(lerp(desde.pos.x, hasta.pos.x, t), lerp(desde.pos.y, hasta.pos.y, t), lerp(desde.pos.z, hasta.pos.z, t));
+  camera3d.lookAt(lerp(desde.obj.x, hasta.obj.x, t), lerp(desde.obj.y, hasta.obj.y, t), lerp(desde.obj.z, hasta.obj.z, t));
+}
 
-      objeto.scale.set(0.02, 0.02, 0.02);
-      objeto.position.set(0, 0, 0);
+function iniciarExplorador() {
+  modoExplorador = true;
+  exploradorYaw = anguloHV;
+  exploradorPitch = 0;
+  exploradorPos = new THREE.Vector3(
+    camera3d.position.x,
+    1.7,
+    camera3d.position.z
+  );
+  renderer3d.domElement.requestPointerLock();
+  var btn = document.getElementById('btn-explorador');
+  if (btn) { btn.classList.add('is-active'); btn.textContent = '⏹ Salir (ESC)'; }
+  document.querySelector('.canvas-controls-hint').style.display = 'flex';
+  document.getElementById('visor-controles').style.pointerEvents = 'none';
+  document.getElementById('btn-explorador').style.pointerEvents = 'auto';
+  var ov = document.getElementById('explorador-overlay');
+  if (ov) { ov.style.opacity = '1'; setTimeout(function () { ov.style.opacity = '0'; }, 3000); }
+}
 
-      objeto.traverse(function (child) {
-        if (child.isMesh) {
-          child.material.side = THREE.DoubleSide;
-        }
-      });
+function salirExplorador() {
+  modoExplorador = false;
+  document.exitPointerLock();
+  var btn = document.getElementById('btn-explorador');
+  if (btn) { btn.classList.remove('is-active'); btn.textContent = '🚶 Explorar'; }
+  document.querySelector('.canvas-controls-hint').style.display = 'none';
+  document.getElementById('visor-controles').style.pointerEvents = 'auto';
+}
 
-      modeloEdificio = objeto;
-      scene.add(objeto);
+function actualizarExplorador() {
+  var cosY = Math.cos(exploradorYaw);
+  var sinY = Math.sin(exploradorYaw);
+  var adelante = new THREE.Vector3(-sinY, 0, -cosY);
+  var derecha = new THREE.Vector3(cosY, 0, -sinY);
 
-      // Centramos la cámara según el tamaño real del modelo, para que
-      // siempre se vea completo de frente sin importar su escala exacta.
-      const caja = new THREE.Box3().setFromObject(objeto);
-      const centro = caja.getCenter(new THREE.Vector3());
-      const tamano = caja.getSize(new THREE.Vector3());
-      const maxDim = Math.max(tamano.x, tamano.y, tamano.z);
+  if (teclas.w) exploradorPos.addScaledVector(adelante, VEL_EXP);
+  if (teclas.s) exploradorPos.addScaledVector(adelante, -VEL_EXP);
+  if (teclas.a) exploradorPos.addScaledVector(derecha, -VEL_EXP);
+  if (teclas.d) exploradorPos.addScaledVector(derecha, VEL_EXP);
 
-      objetivo.set(centro.x, centro.y, centro.z);
-      radio = Math.max(14, Math.min(60, maxDim * 1.7));
-      actualizarCamara();
+  exploradorPos.y = 1.7;
 
-      ocultarCargando();
-      console.log('✅ Modelo CEA Catavi cargado correctamente');
-    },
-
-    function (xhr) {
-      if (xhr.total > 0) {
-        actualizarPorcentajeCarga((xhr.loaded / xhr.total * 100).toFixed(0));
-      }
-    },
-
-    function (error) {
-      console.error('❌ Error al cargar el modelo FBX:', error);
-      mostrarErrorCarga();
-    }
-
+  camera3d.position.copy(exploradorPos);
+  camera3d.lookAt(
+    exploradorPos.x - sinY * 10,
+    exploradorPos.y + Math.sin(exploradorPitch) * 10,
+    exploradorPos.z - cosY * 10
   );
 }
 
+function reiniciarIdleV() { clearTimeout(idleTimerV); idleTimerV = setTimeout(function () { if (!enRecorrido && !modoExplorador) autoRotarV = true; }, IDLE_MS); }
+function pausarAutoV() { autoRotarV = false; reiniciarIdleV(); }
 
-// ════════════════════════════════════════════════════════════
-// LUCES — guardadas en variables globales para los sliders
-// ════════════════════════════════════════════════════════════
-function put_LuzAmbiental() {
-  luzAmbiental = new THREE.AmbientLight(0xFFFFFF, 0.6);
-  scene.add(luzAmbiental);
-}
-
-function put_LuzDireccional() {
-  luzDireccional = new THREE.DirectionalLight(0xFFFFFF, 1.0);
-  luzDireccional.position.set(-20, 30, 20);
-  luzDireccional.target.position.set(0, 3, 0);
-  scene.add(luzDireccional);
-  scene.add(luzDireccional.target);
-}
-
-function put_LuzPuntual() {
-  luzPuntual = new THREE.PointLight(0xFFEEAA, 0.6, 60);
-  luzPuntual.position.set(0, 8, 15);
-  scene.add(luzPuntual);
-}
-
-
-// ════════════════════════════════════════════════════════════
-// PANEL DE ILUMINACIÓN (botón + sliders)
-// ════════════════════════════════════════════════════════════
-function initPanelLuces() {
-  const btn = document.getElementById('btn-luces');
-  const panel = document.getElementById('luz-panel');
-
-  btn.addEventListener('click', function (e) {
-    e.stopPropagation();
-    panel.classList.toggle('is-open');
-    btn.classList.toggle('is-active');
-  });
-
-  document.addEventListener('click', function (e) {
-    if (!panel.contains(e.target) && e.target !== btn) {
-      panel.classList.remove('is-open');
-      btn.classList.remove('is-active');
-    }
-  });
-
-  const sAmb = document.getElementById('slider-ambiental');
-  const sDir = document.getElementById('slider-direccional');
-  const sPun = document.getElementById('slider-puntual');
-  const vAmb = document.getElementById('val-ambiental');
-  const vDir = document.getElementById('val-direccional');
-  const vPun = document.getElementById('val-puntual');
-
-  sAmb.addEventListener('input', function () {
-    luzAmbiental.intensity = sAmb.value / 100;
-    vAmb.textContent = sAmb.value + '%';
-  });
-  sDir.addEventListener('input', function () {
-    luzDireccional.intensity = sDir.value / 100;
-    vDir.textContent = sDir.value + '%';
-  });
-  sPun.addEventListener('input', function () {
-    luzPuntual.intensity = sPun.value / 100;
-    vPun.textContent = sPun.value + '%';
-  });
-}
-
-
-// ════════════════════════════════════════════════════════════
-// CONTROLES DE CÁMARA
-// ════════════════════════════════════════════════════════════
-function initControles() {
-
-  canvasEl.addEventListener('mousedown', function (e) {
-    arrastrando = true;
-    pausarAutoRotacion();
-    ultimoX = e.clientX;
-    ultimoY = e.clientY;
-  });
-
+function initControlesVisor() {
+  var canvas = renderer3d.domElement;
+  canvas.addEventListener('mousedown', function (e) { if (modoExplorador) return; arrastrando = true; pausarAutoV(); ultimoX = e.clientX; ultimoY = e.clientY; });
   window.addEventListener('mouseup', function () { arrastrando = false; });
-
   window.addEventListener('mousemove', function (e) {
+    if (modoExplorador && document.pointerLockElement) { exploradorYaw -= e.movementX * 0.002; exploradorPitch -= e.movementY * 0.002; exploradorPitch = Math.max(-1.2, Math.min(1.2, exploradorPitch)); return; }
     if (!arrastrando) return;
-    const dx = e.clientX - ultimoX;
-    const dy = e.clientY - ultimoY;
-    ultimoX = e.clientX;
-    ultimoY = e.clientY;
-
-    anguloH -= dx * 0.005;
-    anguloV += dy * 0.005;
-    anguloV = Math.max(0.08, Math.min(1.3, anguloV));
-
-    actualizarCamara();
+    var dx = e.clientX - ultimoX, dy = e.clientY - ultimoY; ultimoX = e.clientX; ultimoY = e.clientY;
+    anguloHV -= dx * 0.005; anguloVV += dy * 0.005; anguloVV = Math.max(0.05, Math.min(1.3, anguloVV)); updateCam();
   });
-
-  canvasEl.addEventListener('wheel', function (e) {
-    e.preventDefault();
-    pausarAutoRotacion();
-    radio += e.deltaY * 0.02;
-    radio = Math.max(8, Math.min(70, radio));
-    actualizarCamara();
+  canvas.addEventListener('wheel', function (e) {
+    e.preventDefault(); if (modoExplorador) {
+      var cosY = Math.cos(exploradorYaw), sinY = Math.sin(exploradorYaw);
+      var adelante = new THREE.Vector3(-sinY, 0, -cosY);
+      exploradorPos.addScaledVector(adelante, e.deltaY > 0 ? -VEL_EXP * 3 : VEL_EXP * 3);
+      exploradorPos.y = Math.max(1.8, exploradorPos.y);
+      return;
+    }
+    pausarAutoV(); radioV += e.deltaY * 0.02; radioV = Math.max(6, Math.min(70, radioV)); updateCam();
   }, { passive: false });
-
-  canvasEl.addEventListener('touchstart', function (e) {
-    if (e.touches.length === 1) {
-      arrastrando = true;
-      pausarAutoRotacion();
-      ultimoX = e.touches[0].clientX;
-      ultimoY = e.touches[0].clientY;
-    }
-  }, { passive: true });
-
-  canvasEl.addEventListener('touchmove', function (e) {
-    if (!arrastrando || e.touches.length !== 1) return;
-    const dx = e.touches[0].clientX - ultimoX;
-    const dy = e.touches[0].clientY - ultimoY;
-    ultimoX = e.touches[0].clientX;
-    ultimoY = e.touches[0].clientY;
-
-    anguloH -= dx * 0.006;
-    anguloV += dy * 0.006;
-    anguloV = Math.max(0.08, Math.min(1.3, anguloV));
-    actualizarCamara();
-  }, { passive: true });
-
-  canvasEl.addEventListener('touchend', function () { arrastrando = false; });
-
-  document.getElementById('btn-zoom-in').addEventListener('click', function () {
-    pausarAutoRotacion();
-    radio = Math.max(8, radio - 3);
-    actualizarCamara();
-  });
-  document.getElementById('btn-zoom-out').addEventListener('click', function () {
-    pausarAutoRotacion();
-    radio = Math.min(70, radio + 3);
-    actualizarCamara();
-  });
-  document.getElementById('btn-reset').addEventListener('click', function () {
-    anguloH = 0; anguloV = 0.32;
-    pausarAutoRotacion();
-    actualizarCamara();
-  });
-
-  // Botón "Recorrer" — fuerza el giro automático de inmediato y lo puede pausar
-  const btnRecorrer = document.getElementById('btn-recorrer');
-  btnRecorrer.addEventListener('click', function () {
-    autoRotar = !autoRotar;
-    clearTimeout(idleTimer);
-    if (autoRotar) {
-      btnRecorrer.classList.add('is-active');
-      btnRecorrer.lastChild.textContent = ' Pausar';
-    } else {
-      btnRecorrer.classList.remove('is-active');
-      btnRecorrer.lastChild.textContent = ' Recorrer';
-      reiniciarTemporizadorInactividad();
-    }
-  });
-
-  function actualizarBotonRecorrer() {
-    if (autoRotar) {
-      btnRecorrer.classList.add('is-active');
-      btnRecorrer.lastChild.textContent = ' Pausar';
-    } else {
-      btnRecorrer.classList.remove('is-active');
-      btnRecorrer.lastChild.textContent = ' Recorrer';
-    }
-  }
-  // se actualiza también cuando la auto-rotación arranca sola por inactividad
-  window.addEventListener('cea-autorotate-cambio', actualizarBotonRecorrer);
-}
-
-function pausarAutoRotacion() {
-  if (autoRotar) {
-    autoRotar = false;
-    window.dispatchEvent(new Event('cea-autorotate-cambio'));
-  }
-  reiniciarTemporizadorInactividad();
-}
-
-function reiniciarTemporizadorInactividad() {
-  clearTimeout(idleTimer);
-  idleTimer = setTimeout(function () {
-    autoRotar = true;
-    window.dispatchEvent(new Event('cea-autorotate-cambio'));
-  }, ESPERA_INACTIVIDAD_MS);
-}
-
-function actualizarCamara() {
-  const x = objetivo.x + radio * Math.sin(anguloH) * Math.cos(anguloV);
-  const y = objetivo.y + radio * Math.sin(anguloV);
-  const z = objetivo.z + radio * Math.cos(anguloH) * Math.cos(anguloV);
-  camera.position.set(x, y, z);
-  camera.lookAt(objetivo);
-}
-
-
-// ════════════════════════════════════════════════════════════
-// PANTALLA DE CARGA
-// ════════════════════════════════════════════════════════════
-function actualizarPorcentajeCarga(pct) {
-  const el = document.getElementById('loading-pct');
-  if (el) el.textContent = pct + '%';
-}
-
-function ocultarCargando() {
-  const pantalla = document.getElementById('loading-screen');
-  if (pantalla) pantalla.classList.add('is-hidden');
-}
-
-function mostrarErrorCarga() {
-  const pantalla = document.getElementById('loading-screen');
-  const lbl = document.getElementById('loading-label');
-  if (pantalla && lbl) {
-    pantalla.classList.add('is-error');
-    lbl.innerHTML = 'No se pudo cargar el modelo 3D.<br>Verifica que la carpeta "modelos/CEA_Catavi.fbx" exista junto a esta página.';
+  canvas.addEventListener('touchstart', function (e) { if (e.touches.length === 1) { arrastrando = true; pausarAutoV(); ultimoX = e.touches[0].clientX; ultimoY = e.touches[0].clientY; } }, { passive: true });
+  canvas.addEventListener('touchmove', function (e) { if (!arrastrando || e.touches.length !== 1) return; var dx = e.touches[0].clientX - ultimoX, dy = e.touches[0].clientY - ultimoY; ultimoX = e.touches[0].clientX; ultimoY = e.touches[0].clientY; anguloHV -= dx * 0.006; anguloVV += dy * 0.006; anguloVV = Math.max(0.05, Math.min(1.3, anguloVV)); updateCam(); }, { passive: true });
+  canvas.addEventListener('touchend', function () { arrastrando = false; });
+  document.addEventListener('keydown', function (e) { if (!visorActivo) return; if (e.key === 'w' || e.key === 'W' || e.key === 'ArrowUp') teclas.w = true; if (e.key === 's' || e.key === 'S' || e.key === 'ArrowDown') teclas.s = true; if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') teclas.a = true; if (e.key === 'd' || e.key === 'D' || e.key === 'ArrowRight') teclas.d = true; if (e.key === 'Escape' && modoExplorador) salirExplorador(); });
+  document.addEventListener('keyup', function (e) { if (e.key === 'w' || e.key === 'W' || e.key === 'ArrowUp') teclas.w = false; if (e.key === 's' || e.key === 'S' || e.key === 'ArrowDown') teclas.s = false; if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') teclas.a = false; if (e.key === 'd' || e.key === 'D' || e.key === 'ArrowRight') teclas.d = false; });
+  document.addEventListener('pointerlockchange', function () { if (!document.pointerLockElement && modoExplorador) salirExplorador(); });
+  var bZI = document.getElementById('btn-zoom-in');
+  var bZO = document.getElementById('btn-zoom-out');
+  var bTour = document.getElementById('btn-tour');
+  var bExp = document.getElementById('btn-explorador');
+  if (bZI) bZI.addEventListener('click', function () { pausarAutoV(); radioV = Math.max(6, radioV - 3); updateCam(); });
+  if (bZO) bZO.addEventListener('click', function () { pausarAutoV(); radioV = Math.min(70, radioV + 3); updateCam(); });
+  if (bTour) bTour.addEventListener('click', function () { if (enRecorrido) detenerRecorrido(); else iniciarRecorrido(); });
+  if (bExp) bExp.addEventListener('click', function () { if (modoExplorador) salirExplorador(); else iniciarExplorador(); });
+  document.getElementById('btn-modo-dia').addEventListener('click', function () { aplicarModo('dia'); });
+  document.getElementById('btn-modo-atardecer').addEventListener('click', function () { aplicarModo('atardecer'); });
+  document.getElementById('btn-modo-noche').addEventListener('click', function () { aplicarModo('noche'); });
+  var sA = document.getElementById('slider-ambiental');
+  var sD = document.getElementById('slider-direccional');
+  var sP = document.getElementById('slider-puntual');
+  if (sA) sA.addEventListener('input', function () { luzAmb3d.intensity = sA.value / 100; document.getElementById('val-ambiental').textContent = sA.value + '%'; });
+  if (sD) sD.addEventListener('input', function () { luzDir3d.intensity = sD.value / 100; document.getElementById('val-direccional').textContent = sD.value + '%'; });
+  if (sP) sP.addEventListener('input', function () { luzPun3d.intensity = sP.value / 100; document.getElementById('val-puntual').textContent = sP.value + '%'; });
+  var bL = document.getElementById('btn-luces');
+  var pL = document.getElementById('luz-panel');
+  if (bL && pL) {
+    bL.addEventListener('click', function (e) { e.stopPropagation(); pL.classList.toggle('is-open'); bL.classList.toggle('is-active'); });
+    document.addEventListener('click', function (e) { if (!pL.contains(e.target) && e.target !== bL) { pL.classList.remove('is-open'); bL.classList.remove('is-active'); } });
   }
 }
 
-
-// ════════════════════════════════════════════════════════════
-// RESIZE
-// ════════════════════════════════════════════════════════════
-function alRedimensionar() {
-  const ancho = canvasFrame.clientWidth;
-  const alto = canvasFrame.clientHeight;
-  camera.aspect = ancho / alto;
-  camera.updateProjectionMatrix();
-  renderer.setSize(ancho, alto);
-}
-
-
-// ════════════════════════════════════════════════════════════
-// ANIMATE
-// ════════════════════════════════════════════════════════════
-function animate() {
-  requestAnimationFrame(animate);
-
-  if (autoRotar) {
-    anguloH += 0.0022;
-    actualizarCamara();
-  }
-
-  renderer.render(scene, camera);
-}
-
-
-// ════════════════════════════════════════════════════════════
-// INICIO
-// ════════════════════════════════════════════════════════════
-init();
+document.getElementById('btn-entrar').addEventListener('click', function () { entrarVisor(false); });
+document.getElementById('btn-recorrer-intro').addEventListener('click', function () { entrarVisor(true); });
+document.getElementById('btn-salir-visor').addEventListener('click', salirVisor);
