@@ -27,27 +27,18 @@
       height: 100% !important;
     }
 
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
     .scrim-3d {
       position: fixed;
       inset: 0;
       z-index: 0;
       pointer-events: none;
       background: linear-gradient(180deg, rgba(10, 14, 20, .4) 0%, rgba(10, 14, 20, .08) 40%, rgba(10, 14, 20, .96) 86%);
-    }
-
-    nav.nav-hero {
-      position: fixed !important;
-      z-index: 100 !important;
-      pointer-events: auto !important;
-    }
-
-    nav.nav-hero a {
-      pointer-events: auto !important;
-    }
-
-    .hero {
-      position: relative;
-      z-index: 1;
     }
 
     .hero-bg {
@@ -57,88 +48,109 @@
     .hero-scrim {
       display: none;
     }
-
-    .datastrip,
-    .intro,
-    footer {
-      position: relative;
-      z-index: 1;
-      background: rgba(10, 14, 20, 0.82);
-      backdrop-filter: blur(14px);
-    }
   </style>
 </head>
 
 <body>
 
   <div id="fondo-3d"></div>
-  <div class="scrim-3d"></div>
 
-  <nav class="nav-hero">
-    <div class="brand"><span class="brand-mark">CEA</span> C.E.A. "Catavi"</div>
-    <div class="nav-links">
-      <a href="index.html" class="active">Inicio</a>
-      <a href="historia.html">Historia &amp; Programas</a>
-      <a href="modelo3d.html">Modelo 3D</a>
+  <div id="pantalla-carga"
+    style="position:fixed;inset:0;z-index:9000;background:#0a0e14;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;">
+    <p style="font-family:'Fraunces',serif;font-size:1.6rem;color:#f0ebe0;">C.E.A. <span
+        style="color:#e8c87a;">"Catavi"</span></p>
+    <div
+      style="width:28px;height:28px;border-radius:50%;border:2px solid #ffffff14;border-top-color:#e8c87a;animation:spin 0.9s linear infinite;">
     </div>
-  </nav>
-
-  <section class="hero">
-    <div class="hero-content">
-      <div class="eyebrow"><span class="dash"></span> Llallagua · Potosí · Bolivia</div>
-      <h1 class="title">Centro de Educación<br><span class="accent">Alternativa</span> Catavi</h1>
-      <p class="hero-sub">
-        Formación Técnica Humanística para jóvenes y adultos del Norte de Potosí.
-        Un espacio donde el oficio se aprende con las manos y el futuro se construye con conocimientos.
-      </p>
-      <div class="scroll-cue"><span class="line"></span> Desplázate para conocer el centro</div>
-      <div class="hero-cta-row">
-        <a class="btn btn-primary" href="historia.html">Historia &amp; Programas
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M5 12h14M13 6l6 6-6 6" />
-          </svg>
-        </a>
-        <a class="btn btn-ghost" href="modelo3d.html">Ver el edificio en 3D</a>
-      </div>
+    <div style="width:180px;height:2px;background:#ffffff14;border-radius:2px;overflow:hidden;">
+      <div id="carga-relleno" style="height:100%;width:0%;background:#e8c87a;transition:width 0.3s;"></div>
     </div>
-  </section>
-
-  <div class="datastrip">
-    <div class="cell"><span class="num">8</span><span class="lbl">Especialidades técnicas</span></div>
-    <div class="cell"><span class="num">3D</span><span class="lbl">Modelo navegable del edificio</span></div>
+    <p id="carga-pct" style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:#e8c87a;">0%</p>
   </div>
 
-  <section class="intro">
-    <div class="intro-fact">
-      <div class="intro-label"><span class="dash"></span>En cifras</div>
-      <ul class="fact-list">
-        <li><span class="fk">Fundación del centro</span><span class="fv">1972</span></li>
-        <li><span class="fk">Construcción del edificio actual</span><span class="fv">2007–2011</span></li>
-        <li><span class="fk">Reconocimiento como C.E.A.</span><span class="fv">2012</span></li>
-        <li><span class="fk">Bodas de Oro (Senado de Bolivia)</span><span class="fv">2022</span></li>
-      </ul>
-    </div>
-    <div>
-      <h2>Un edificio levantado sobre la ladera, mirando hacia el futuro de Catavi.</h2>
-      <div class="intro-body">
-        <p>El <strong>C.E.A. "Catavi"</strong> se distingue por su fachada ocre de tres niveles y la estructura de
-          vidrio que corona su bloque central — una claraboya que ilumina las escaleras interiores y que de noche se
-          enciende como un faro sobre el barrio.</p>
-        <p>Este sitio reconstruye el edificio en tres dimensiones, tal como se ve desde la calle: sus bloques unidos, el
-          muro de ladrillo que lo resguarda, y las ventanas que durante el día reflejan el cielo de Potosí.</p>
-      </div>
-    </div>
-  </section>
+  <div class="scrim-3d"></div>
 
-  <footer>
-    <span>© C.E.A. "Catavi" — Llallagua, Potosí, Bolivia</span>
-    <span>Sitio Web 3D — Blender · Three.js · WebGL</span>
-  </footer>
+  <div id="pagina">
+
+    <nav class="nav-hero">
+      <div class="brand"><span class="brand-mark">CEA</span> C.E.A. "Catavi"</div>
+      <div class="nav-links">
+        <a href="index.html" class="active">Inicio</a>
+        <a href="historia.html">Historia &amp; Programas</a>
+        <a href="modelo3d.html">Modelo 3D</a>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-content">
+        <div class="eyebrow"><span class="dash"></span> Llallagua · Potosí · Bolivia</div>
+        <h1 class="title">Centro de Educación<br><span class="accent">Alternativa</span> Catavi</h1>
+        <p class="hero-sub">
+          Formación Técnica Humanística para jóvenes y adultos del Norte de Potosí.
+          Un espacio donde el oficio se aprende con las manos y el futuro se construye con conocimientos.
+        </p>
+        <div class="scroll-cue"><span class="line"></span> Desplázate para conocer el centro</div>
+        <div class="hero-cta-row">
+          <a class="btn btn-primary" href="historia.html">Historia &amp; Programas
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </a>
+          <a class="btn btn-ghost" href="modelo3d.html">Ver el edificio en 3D</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="datastrip">
+      <div class="cell"><span class="num">8</span><span class="lbl">Especialidades técnicas</span></div>
+      <div class="cell"><span class="num">3D</span><span class="lbl">Modelo navegable del edificio</span></div>
+    </div>
+
+    <section class="intro">
+      <div class="intro-fact">
+        <div class="intro-label"><span class="dash"></span>En cifras</div>
+        <ul class="fact-list">
+          <li><span class="fk">Fundación del centro</span><span class="fv">1972</span></li>
+          <li><span class="fk">Construcción del edificio actual</span><span class="fv">2007–2011</span></li>
+          <li><span class="fk">Reconocimiento como C.E.A.</span><span class="fv">2012</span></li>
+          <li><span class="fk">Bodas de Oro (Senado de Bolivia)</span><span class="fv">2022</span></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Un edificio levantado sobre la ladera, mirando hacia el futuro de Catavi.</h2>
+        <div class="intro-body">
+          <p>El <strong>C.E.A. "Catavi"</strong> se distingue por su fachada ocre de tres niveles y la estructura de
+            vidrio que corona su bloque central — una claraboya que ilumina las escaleras interiores y que de noche se
+            enciende como un faro sobre el barrio.</p>
+          <p>Este sitio reconstruye el edificio en tres dimensiones, tal como se ve desde la calle: sus bloques unidos,
+            el muro de ladrillo que lo resguarda, y las ventanas que durante el día reflejan el cielo de Potosí.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span>© C.E.A. "Catavi" — Llallagua, Potosí, Bolivia</span>
+      <span>Sitio Web 3D — Blender · Three.js · WebGL</span>
+    </footer>
+
+  </div>
 
   <script src="js/libs/three.js"></script>
   <script src="js/libs/fflate.min.js"></script>
   <script src="js/libs/FBXLoader.js"></script>
   <script src="js/fondo3d.js"></script>
+  <script>
+    document.querySelectorAll('a[href]').forEach(function (a) {
+      var href = a.getAttribute('href');
+      if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto') || href.startsWith('tel')) return;
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        var p = document.getElementById('pagina');
+        if (p) p.style.animation = 'slideSalir 0.35s ease forwards';
+        setTimeout(function () { window.location.href = href; }, 360);
+      });
+    });
+  </script>
 </body>
 
 </html>

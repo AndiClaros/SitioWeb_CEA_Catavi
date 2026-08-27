@@ -11,7 +11,7 @@ var puntosTour = [
   { pos: { x: 0, y: 22, z: 12 }, obj: { x: 0, y: 0, z: 0 } }
 ];
 var modoExplorador = false;
-var teclas = { w: false, a: false, s: false, d: false };
+var teclas = { w: false, a: false, s: false, d: false, q: false, e: false };
 var exploradorPos, exploradorYaw = 0, exploradorPitch = 0;
 var VEL_EXP = 0.12;
 var controlesIniciados = false;
@@ -41,8 +41,7 @@ function updateCam() {
 function entrarVisor(iniciarTour) {
   visorActivo = true;
   objetivoV = objetivoFondo ? objetivoFondo.clone() : new THREE.Vector3(0, 4, 0);
-  anguloHV = anguloFondo;
-  radioV = 30;
+  anguloHV = anguloFondo; radioV = 30;
   document.getElementById('fondo-3d').style.pointerEvents = 'auto';
   document.querySelector('nav').style.opacity = '0';
   document.querySelector('nav').style.pointerEvents = 'none';
@@ -52,8 +51,7 @@ function entrarVisor(iniciarTour) {
     intro.style.display = 'none';
     var ctrl = document.getElementById('visor-controles');
     var btnS = document.getElementById('btn-salir-visor');
-    ctrl.style.display = 'flex';
-    btnS.style.display = 'flex';
+    ctrl.style.display = 'flex'; btnS.style.display = 'flex';
     setTimeout(function () { ctrl.style.opacity = '1'; btnS.style.opacity = '1'; }, 30);
   }, 400);
   if (!controlesIniciados) { controlesIniciados = true; initControlesVisor(); }
@@ -66,6 +64,7 @@ function salirVisor() {
   if (modoExplorador) salirExplorador();
   enRecorrido = false; autoRotarV = false; clearTimeout(idleTimerV);
   anguloFondo = anguloHV; visorActivo = false;
+  quitarClima();
   document.getElementById('fondo-3d').style.pointerEvents = 'none';
   document.querySelector('nav').style.opacity = '1';
   document.querySelector('nav').style.pointerEvents = 'auto';
@@ -96,6 +95,9 @@ function aplicarModo(nombre) {
   document.querySelectorAll('.btn-modo').forEach(function (b) { b.classList.remove('is-active'); });
   var ba = document.getElementById('btn-modo-' + nombre);
   if (ba) ba.classList.add('is-active');
+  if (nombre === 'noche') crearLluvia();
+  else if (nombre === 'atardecer') crearNieve();
+  else quitarClima();
 }
 
 function lerp(a, b, t) { return a + (b - a) * t; }
@@ -105,14 +107,12 @@ function iniciarRecorrido() {
   var btn = document.getElementById('btn-tour');
   if (btn) { btn.classList.add('is-active'); btn.textContent = '⏹ Detener'; }
 }
-
 function detenerRecorrido() {
   enRecorrido = false;
   var btn = document.getElementById('btn-tour');
   if (btn) { btn.classList.remove('is-active'); btn.textContent = '🎬 Recorrido'; }
   reiniciarIdleV();
 }
-
 function actualizarRecorrido() {
   var desde = puntosTour[puntoActual];
   var hasta = puntosTour[(puntoActual + 1) % puntosTour.length];
@@ -124,14 +124,8 @@ function actualizarRecorrido() {
 }
 
 function iniciarExplorador() {
-  modoExplorador = true;
-  exploradorYaw = anguloHV;
-  exploradorPitch = 0;
-  exploradorPos = new THREE.Vector3(
-    camera3d.position.x,
-    1.7,
-    camera3d.position.z
-  );
+  modoExplorador = true; exploradorYaw = anguloHV; exploradorPitch = 0;
+  exploradorPos = new THREE.Vector3(camera3d.position.x, 1.7, camera3d.position.z);
   renderer3d.domElement.requestPointerLock();
   var btn = document.getElementById('btn-explorador');
   if (btn) { btn.classList.add('is-active'); btn.textContent = '⏹ Salir (ESC)'; }
@@ -141,29 +135,24 @@ function iniciarExplorador() {
   var ov = document.getElementById('explorador-overlay');
   if (ov) { ov.style.opacity = '1'; setTimeout(function () { ov.style.opacity = '0'; }, 3000); }
 }
-
 function salirExplorador() {
-  modoExplorador = false;
-  document.exitPointerLock();
+  modoExplorador = false; document.exitPointerLock();
   var btn = document.getElementById('btn-explorador');
   if (btn) { btn.classList.remove('is-active'); btn.textContent = '🚶 Explorar'; }
   document.querySelector('.canvas-controls-hint').style.display = 'none';
   document.getElementById('visor-controles').style.pointerEvents = 'auto';
 }
-
 function actualizarExplorador() {
-  var cosY = Math.cos(exploradorYaw);
-  var sinY = Math.sin(exploradorYaw);
+  var cosY = Math.cos(exploradorYaw), sinY = Math.sin(exploradorYaw);
   var adelante = new THREE.Vector3(-sinY, 0, -cosY);
   var derecha = new THREE.Vector3(cosY, 0, -sinY);
-
   if (teclas.w) exploradorPos.addScaledVector(adelante, VEL_EXP);
   if (teclas.s) exploradorPos.addScaledVector(adelante, -VEL_EXP);
   if (teclas.a) exploradorPos.addScaledVector(derecha, -VEL_EXP);
   if (teclas.d) exploradorPos.addScaledVector(derecha, VEL_EXP);
-
-  exploradorPos.y = 1.7;
-
+  if (teclas.q) exploradorPos.y += VEL_EXP;
+  if (teclas.e) exploradorPos.y -= VEL_EXP;
+  exploradorPos.y = Math.max(1.7, exploradorPos.y);
   camera3d.position.copy(exploradorPos);
   camera3d.lookAt(
     exploradorPos.x - sinY * 10,
@@ -180,27 +169,49 @@ function initControlesVisor() {
   canvas.addEventListener('mousedown', function (e) { if (modoExplorador) return; arrastrando = true; pausarAutoV(); ultimoX = e.clientX; ultimoY = e.clientY; });
   window.addEventListener('mouseup', function () { arrastrando = false; });
   window.addEventListener('mousemove', function (e) {
-    if (modoExplorador && document.pointerLockElement) { exploradorYaw -= e.movementX * 0.002; exploradorPitch -= e.movementY * 0.002; exploradorPitch = Math.max(-1.2, Math.min(1.2, exploradorPitch)); return; }
+    if (modoExplorador && document.pointerLockElement) {
+      exploradorYaw -= e.movementX * 0.002;
+      exploradorPitch -= e.movementY * 0.002;
+      exploradorPitch = Math.max(-1.2, Math.min(1.2, exploradorPitch)); return;
+    }
     if (!arrastrando) return;
     var dx = e.clientX - ultimoX, dy = e.clientY - ultimoY; ultimoX = e.clientX; ultimoY = e.clientY;
     anguloHV -= dx * 0.005; anguloVV += dy * 0.005; anguloVV = Math.max(0.05, Math.min(1.3, anguloVV)); updateCam();
   });
   canvas.addEventListener('wheel', function (e) {
-    e.preventDefault(); if (modoExplorador) {
+    e.preventDefault();
+    if (modoExplorador) {
       var cosY = Math.cos(exploradorYaw), sinY = Math.sin(exploradorYaw);
       var adelante = new THREE.Vector3(-sinY, 0, -cosY);
       exploradorPos.addScaledVector(adelante, e.deltaY > 0 ? -VEL_EXP * 3 : VEL_EXP * 3);
-      exploradorPos.y = Math.max(1.8, exploradorPos.y);
-      return;
+      exploradorPos.y = Math.max(1.7, exploradorPos.y); return;
     }
     pausarAutoV(); radioV += e.deltaY * 0.02; radioV = Math.max(6, Math.min(70, radioV)); updateCam();
   }, { passive: false });
   canvas.addEventListener('touchstart', function (e) { if (e.touches.length === 1) { arrastrando = true; pausarAutoV(); ultimoX = e.touches[0].clientX; ultimoY = e.touches[0].clientY; } }, { passive: true });
   canvas.addEventListener('touchmove', function (e) { if (!arrastrando || e.touches.length !== 1) return; var dx = e.touches[0].clientX - ultimoX, dy = e.touches[0].clientY - ultimoY; ultimoX = e.touches[0].clientX; ultimoY = e.touches[0].clientY; anguloHV -= dx * 0.006; anguloVV += dy * 0.006; anguloVV = Math.max(0.05, Math.min(1.3, anguloVV)); updateCam(); }, { passive: true });
   canvas.addEventListener('touchend', function () { arrastrando = false; });
-  document.addEventListener('keydown', function (e) { if (!visorActivo) return; if (e.key === 'w' || e.key === 'W' || e.key === 'ArrowUp') teclas.w = true; if (e.key === 's' || e.key === 'S' || e.key === 'ArrowDown') teclas.s = true; if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') teclas.a = true; if (e.key === 'd' || e.key === 'D' || e.key === 'ArrowRight') teclas.d = true; if (e.key === 'Escape' && modoExplorador) salirExplorador(); });
-  document.addEventListener('keyup', function (e) { if (e.key === 'w' || e.key === 'W' || e.key === 'ArrowUp') teclas.w = false; if (e.key === 's' || e.key === 'S' || e.key === 'ArrowDown') teclas.s = false; if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') teclas.a = false; if (e.key === 'd' || e.key === 'D' || e.key === 'ArrowRight') teclas.d = false; });
+
+  document.addEventListener('keydown', function (e) {
+    if (!visorActivo) return;
+    if (e.key === 'w' || e.key === 'W' || e.key === 'ArrowUp') teclas.w = true;
+    if (e.key === 's' || e.key === 'S' || e.key === 'ArrowDown') teclas.s = true;
+    if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') teclas.a = true;
+    if (e.key === 'd' || e.key === 'D' || e.key === 'ArrowRight') teclas.d = true;
+    if (e.key === 'q' || e.key === 'Q') teclas.q = true;
+    if (e.key === 'e' || e.key === 'E') teclas.e = true;
+    if (e.key === 'Escape' && modoExplorador) salirExplorador();
+  });
+  document.addEventListener('keyup', function (e) {
+    if (e.key === 'w' || e.key === 'W' || e.key === 'ArrowUp') teclas.w = false;
+    if (e.key === 's' || e.key === 'S' || e.key === 'ArrowDown') teclas.s = false;
+    if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') teclas.a = false;
+    if (e.key === 'd' || e.key === 'D' || e.key === 'ArrowRight') teclas.d = false;
+    if (e.key === 'q' || e.key === 'Q') teclas.q = false;
+    if (e.key === 'e' || e.key === 'E') teclas.e = false;
+  });
   document.addEventListener('pointerlockchange', function () { if (!document.pointerLockElement && modoExplorador) salirExplorador(); });
+
   var bZI = document.getElementById('btn-zoom-in');
   var bZO = document.getElementById('btn-zoom-out');
   var bTour = document.getElementById('btn-tour');
@@ -209,21 +220,48 @@ function initControlesVisor() {
   if (bZO) bZO.addEventListener('click', function () { pausarAutoV(); radioV = Math.min(70, radioV + 3); updateCam(); });
   if (bTour) bTour.addEventListener('click', function () { if (enRecorrido) detenerRecorrido(); else iniciarRecorrido(); });
   if (bExp) bExp.addEventListener('click', function () { if (modoExplorador) salirExplorador(); else iniciarExplorador(); });
+
   document.getElementById('btn-modo-dia').addEventListener('click', function () { aplicarModo('dia'); });
   document.getElementById('btn-modo-atardecer').addEventListener('click', function () { aplicarModo('atardecer'); });
   document.getElementById('btn-modo-noche').addEventListener('click', function () { aplicarModo('noche'); });
+
   var sA = document.getElementById('slider-ambiental');
   var sD = document.getElementById('slider-direccional');
   var sP = document.getElementById('slider-puntual');
   if (sA) sA.addEventListener('input', function () { luzAmb3d.intensity = sA.value / 100; document.getElementById('val-ambiental').textContent = sA.value + '%'; });
   if (sD) sD.addEventListener('input', function () { luzDir3d.intensity = sD.value / 100; document.getElementById('val-direccional').textContent = sD.value + '%'; });
   if (sP) sP.addEventListener('input', function () { luzPun3d.intensity = sP.value / 100; document.getElementById('val-puntual').textContent = sP.value + '%'; });
+
   var bL = document.getElementById('btn-luces');
   var pL = document.getElementById('luz-panel');
   if (bL && pL) {
     bL.addEventListener('click', function (e) { e.stopPropagation(); pL.classList.toggle('is-open'); bL.classList.toggle('is-active'); });
     document.addEventListener('click', function (e) { if (!pL.contains(e.target) && e.target !== bL) { pL.classList.remove('is-open'); bL.classList.remove('is-active'); } });
   }
+
+  var bFS = document.getElementById('btn-fullscreen');
+  if (bFS) {
+    bFS.addEventListener('click', function () {
+      if (!document.fullscreenElement) { document.documentElement.requestFullscreen(); bFS.title = 'Salir de pantalla completa'; }
+      else { document.exitFullscreen(); bFS.title = 'Pantalla completa'; }
+    });
+    document.addEventListener('fullscreenchange', function () {
+      var icon = bFS.querySelector('svg');
+      if (document.fullscreenElement) { icon.innerHTML = '<path d="M8 3v3a2 2 0 0 1-2 2H3M21 8h-3a2 2 0 0 1-2-2V3M3 16h3a2 2 0 0 0 2 2v3M16 21v-3a2 2 0 0 1 2-2h3"/>'; }
+      else { icon.innerHTML = '<path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M3 16v3a2 2 0 0 0 2 2h3"/>'; }
+    });
+  }
+
+  var bCalta = document.getElementById('btn-cal-alta');
+  var bCmedia = document.getElementById('btn-cal-media');
+  var bCbaja = document.getElementById('btn-cal-baja');
+  function marcarCalidad(activo) {
+    [bCalta, bCmedia, bCbaja].forEach(function (b) { if (b) b.classList.remove('is-active'); });
+    if (activo) activo.classList.add('is-active');
+  }
+  if (bCalta) bCalta.addEventListener('click', function () { aplicarCalidad('alta'); marcarCalidad(bCalta); });
+  if (bCmedia) bCmedia.addEventListener('click', function () { aplicarCalidad('media'); marcarCalidad(bCmedia); });
+  if (bCbaja) bCbaja.addEventListener('click', function () { aplicarCalidad('baja'); marcarCalidad(bCbaja); });
 }
 
 document.getElementById('btn-entrar').addEventListener('click', function () { entrarVisor(false); });

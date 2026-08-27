@@ -27,16 +27,6 @@
       height: 100% !important;
     }
 
-    nav.nav-hero {
-      position: fixed !important;
-      z-index: 100 !important;
-      pointer-events: auto !important;
-    }
-
-    nav.nav-hero a {
-      pointer-events: auto !important;
-    }
-
     #vista-intro {
       position: fixed;
       inset: 0;
@@ -329,28 +319,21 @@
 
   <div id="fondo-3d"></div>
 
-  <nav class="nav-hero">
-    <div class="brand"><span class="brand-mark">CEA</span> C.E.A. "Catavi"</div>
-    <div class="nav-links">
-      <a href="index.html">Inicio</a>
-      <a href="historia.html">Historia &amp; Programas</a>
-      <a href="modelo3d.html" class="active">Modelo 3D</a>
+  <div id="pantalla-carga"
+    style="position:fixed;inset:0;z-index:9000;background:#0a0e14;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2rem;">
+    <p style="font-family:'Fraunces',serif;font-size:1.6rem;color:#f0ebe0;letter-spacing:0.02em;">C.E.A. <span
+        style="color:#e8c87a;">"Catavi"</span></p>
+    <p style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#8b8f9a;letter-spacing:0.08em;">CARGANDO
+      MODELO 3D</p>
+    <div style="width:220px;height:3px;background:#ffffff14;border-radius:3px;overflow:hidden;">
+      <div id="carga-relleno" style="height:100%;width:0%;background:#e8c87a;transition:width 0.3s;"></div>
     </div>
-  </nav>
-
-  <div id="vista-intro">
-    <div class="tag-pill"><span class="dot"></span> Modelo 3D en vivo</div>
-    <h1>El edificio, <span class="accent">navegable</span> desde cualquier ángulo</h1>
-    <p>Modelo 3D del C.E.A. "Catavi" modelado en Blender a partir de fotografías propias del edificio, y exportado a
-      este sitio con Three.js.</p>
-    <div class="intro-btns">
-      <button id="btn-entrar" class="btn btn-primary">Entrar al modelo 3D →</button>
-      <button id="btn-recorrer-intro" class="btn btn-ghost">🎬 Recorrido</button>
-    </div>
+    <p id="carga-pct" style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:#e8c87a;">0%</p>
   </div>
 
+  <!-- Estos 3 elementos son position:fixed y van FUERA de #pagina
+     para que no se vean afectados por la animación de slide -->
   <button id="btn-salir-visor">← Salir</button>
-
   <div id="visor-controles">
     <div class="canvas-controls-hint">
       <span><b>Arrastrar</b> — rotar</span>
@@ -358,7 +341,6 @@
       <span><b>WASD</b> — explorar</span>
     </div>
     <div class="canvas-toolbar">
-
       <div class="modo-grupo">
         <button class="btn-modo is-active" id="btn-modo-dia">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -382,8 +364,12 @@
           </svg>
           Noche
         </button>
+        <div class="modo-grupo">
+          <button class="btn-modo" id="btn-cal-alta">Alta</button>
+          <button class="btn-modo is-active" id="btn-cal-media">Media</button>
+          <button class="btn-modo" id="btn-cal-baja">Baja</button>
+        </div>
       </div>
-
       <div class="toolbar-wrap">
         <button class="tool-btn icon-only" id="btn-luces" title="Iluminación">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -406,7 +392,6 @@
           </div>
         </div>
       </div>
-
       <button class="tool-btn" id="btn-tour">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M3 12a9 9 0 1 0 9-9" />
@@ -414,9 +399,7 @@
         </svg>
         🎬 Recorrido
       </button>
-
       <button class="tool-btn" id="btn-explorador">🚶 Explorar</button>
-
       <button class="tool-btn icon-only" id="btn-zoom-out" title="Alejar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="11" cy="11" r="7" />
@@ -429,17 +412,55 @@
           <path d="M21 21l-4.35-4.35M11 8v6M8 11h6" />
         </svg>
       </button>
-
+      <button class="tool-btn icon-only" id="btn-fullscreen" title="Pantalla completa">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M3 16v3a2 2 0 0 0 2 2h3" />
+        </svg>
+      </button>
     </div>
   </div>
+  <div id="explorador-overlay">W A S D — mover &nbsp;|&nbsp; Q/E — subir/bajar &nbsp;|&nbsp; Mouse — mirar &nbsp;|&nbsp;
+    ESC — salir</div>
 
-  <div id="explorador-overlay">W A S D — mover &nbsp;|&nbsp; Mouse — mirar &nbsp;|&nbsp; ESC — salir</div>
+  <!-- #pagina solo envuelve el nav y la pantalla de intro -->
+  <div id="pagina">
+    <nav class="nav-hero">
+      <div class="brand"><span class="brand-mark">CEA</span> C.E.A. "Catavi"</div>
+      <div class="nav-links">
+        <a href="index.html">Inicio</a>
+        <a href="historia.html">Historia &amp; Programas</a>
+        <a href="modelo3d.html" class="active">Modelo 3D</a>
+      </div>
+    </nav>
+    <div id="vista-intro">
+      <div class="tag-pill"><span class="dot"></span> Modelo 3D en vivo</div>
+      <h1>El edificio, <span class="accent">navegable</span> desde cualquier ángulo</h1>
+      <p>Modelo 3D del C.E.A. "Catavi" modelado en Blender a partir de fotografías propias del edificio, y exportado a
+        este sitio con Three.js.</p>
+      <div class="intro-btns">
+        <button id="btn-entrar" class="btn btn-primary">Entrar al modelo 3D →</button>
+        <button id="btn-recorrer-intro" class="btn btn-ghost">🎬 Recorrido</button>
+      </div>
+    </div>
+  </div>
 
   <script src="js/libs/three.js"></script>
   <script src="js/libs/fflate.min.js"></script>
   <script src="js/libs/FBXLoader.js"></script>
   <script src="js/fondo3d.js"></script>
   <script src="js/modelo3d.js"></script>
+  <script>
+    document.querySelectorAll('a[href]').forEach(function (a) {
+      var href = a.getAttribute('href');
+      if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto') || href.startsWith('tel')) return;
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        var p = document.getElementById('pagina');
+        if (p) p.style.animation = 'slideSalir 0.35s ease forwards';
+        setTimeout(function () { window.location.href = href; }, 360);
+      });
+    });
+  </script>
 </body>
 
 </html>
