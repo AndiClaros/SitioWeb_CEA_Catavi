@@ -139,7 +139,7 @@ function initFondo3D() {
 
   var fbxLoader = new THREE.FBXLoader();
   fbxLoader.load(
-    'modelos/practicatextura.fbx',
+    'modelos/InteriorV2.fbx',
     function (objeto) {
       objeto.scale.set(0.02, 0.02, 0.02);
       var caja = new THREE.Box3().setFromObject(objeto);
