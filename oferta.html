@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oferta Académica — C.E.A. "Catavi"</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        #fondo-3d {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        #fondo-3d canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .scrim-3d {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background: rgba(10, 14, 20, 0.65);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="fondo-3d"></div>
+    <div class="scrim-3d"></div>
+    <div id="pagina">
+        <nav class="nav-hero">
+            <div class="brand"><span class="brand-mark">CEA</span> C.E.A. "Catavi"</div>
+            <div class="nav-links">
+                <a href="index.html">Inicio</a>
+                <a href="institucion.html">Institución</a>
+                <a href="historia.html">Historia</a>
+                <a href="oferta.html" class="active">Oferta</a>
+                <a href="noticias.html">Noticias</a>
+                <a href="galeria.html">Galería</a>
+                <a href="modelo3d.html">Modelo 3D</a>
+                <a href="contacto.html">Contacto</a>
+            </div>
+        </nav>
+
+        <header class="page-head">
+            <div class="page-eyebrow"><span class="dash"></span> Formación Integral</div>
+            <h1>Oferta <span class="accent">Académica</span></h1>
+            <p class="sub">Educación de Personas Jóvenes y Adultos, con horarios flexibles y metodología adaptada,
+                articulada con la formación técnica.</p>
+        </header>
+
+        <section class="humanistica">
+            <div class="human-box">
+                <span class="section-tag">Área <span class="accent">Humanística</span></span>
+                <h3 style="margin-top:1rem;">Primaria y Secundaria de Adultos</h3>
+                <p>Permite concluir tus estudios a quienes no pudieron hacerlo en la edad regular. Culmina con
+                    Bachillerato Técnico-Humanístico válido para universidad o trabajo.</p>
+                <div class="human-grid">
+                    <div class="human-col">
+                        <h4>Niveles</h4>
+                        <ul>
+                            <li>Primaria de Adultos — 3 ciclos</li>
+                            <li>Secundaria de Adultos — 6 cursos</li>
+                            <li>Bachillerato Técnico-Humanístico</li>
+                        </ul>
+                    </div>
+                    <div class="human-col">
+                        <h4>Jornadas</h4>
+                        <ul>
+                            <li>Vespertina: 16:00 a 20:00 h</li>
+                            <li>Nocturna: 18:00 a 22:00 h</li>
+                            <li>Fin de semana: 08:00 a 14:00 h</li>
+                        </ul>
+                    </div>
+                    <div class="human-col">
+                        <h4>Requisitos</h4>
+                        <ul>
+                            <li>Inscripción gratuita</li>
+                            <li>Carnet de Identidad (CI)</li>
+                            <li>Certificado de estudios + 2 fotos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="programas-section">
+            <div class="programas-head">
+                <h2>Especialidades Técnicas</h2>
+                <span class="note">Niveles Técnico Auxiliar (1 año) y Técnico Medio (2 años), con validez nacional (Ley
+                    070).</span>
+            </div>
+            <div class="grid-talleres">
+                <div class="taller"><span class="idx">TÉC. 01</span>
+                    <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="3" />
+                            <path
+                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9" />
+                        </svg></div>
+                    <h3>Mecánica Automotriz</h3>
+                    <p>Motores gasolina/diésel, transmisión, frenos ABS y electricidad automotriz.</p>
+                </div>
+                <div class="taller"><span class="idx">TÉC. 02</span>
+                    <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />
+                        </svg></div>
+                    <h3>Electricidad Industrial</h3>
+                    <p>Instalaciones domiciliarias e industriales, tableros, motores y energía solar.</p>
+                </div>
+                <div class="taller"><span class="idx">TÉC. 03</span>
+                    <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="4" y="4" width="16" height="16" rx="2" />
+                            <path d="M9 9h1v1H9zM14 9h1v1h-1zM9 14h1v1H9zM14 14h1v1h-1z" />
+                        </svg></div>
+                    <h3>Electrónica</h3>
+                    <p>Circuitos analógicos y digitales, soldadura y reparación de equipos de audio/TV.</p>
+                </div>
+                <div class="taller"><span class="idx">TÉC. 04</span>
+                    <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M3 21h18M5 21V7l8-4 8 4v14M9 21v-6h6v6" />
+                        </svg></div>
+                    <h3>Construcción Civil</h3>
+                    <p>Albañilería, lectura de planos, instalaciones sanitarias y acabados de obra.</p>
+                </div>
+                <div class="taller"><span class="idx">TÉC. 05</span>
+                    <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
+                            <path d="M14 2v5h5M9 13h6M9 17h6" />
+                        </svg></div>
+                    <h3>Corte y Confección</h3>
+                    <p>Patronaje, escalado de tallas, costura industrial y confección de uniformes.</p>
+                </div>
+                <div class="taller"><span class="idx">TÉC. 06</span>
+                    <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M3 3v18h18M7 16l4-6 4 3 5-8" />
+                        </svg></div>
+                    <h3>Computación</h3>
+                    <p>Ofimática, internet, trámites digitales y mantenimiento preventivo de equipos.</p>
+                </div>
+                <div class="taller"><span class="idx">TÉC. 07</span>
+                    <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M6 13.5C6 10 8.5 7 12 7s6 3 6 6.5M4 13.5h16M5 17h14M8 21h8" />
+                        </svg></div>
+                    <h3>Gastronomía</h3>
+                    <p>Nutrición, higiene alimentaria, panadería, repostería y servicio de mesa.</p>
+                </div>
+                <div class="taller"><span class="idx">TÉC. 08</span>
+                    <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M4 21V8l8-5 8 5v13M9 21v-7h6v7M4 12h16" />
+                        </svg></div>
+                    <h3>Carpintería</h3>
+                    <p>Tipos de madera, corte, ensamblaje, acabados y fabricación de muebles básicos.</p>
+                </div>
+            </div>
+
+            <div class="cursos-cortos">
+                <h4>Cursos cortos y complementarios (2 a 6 meses)</h4>
+                <div class="cursos-grid">
+                    <div class="curso-chip"><b>Mantenimiento de motos</b>Reparación, ajuste, encendido y frenos.</div>
+                    <div class="curso-chip"><b>Electricidad domiciliaria</b>Para trabajos del hogar y pequeños negocios.
+                    </div>
+                    <div class="curso-chip"><b>Repostería y panadería</b>Panes, pasteles, galletas y dulces regionales.
+                    </div>
+                    <div class="curso-chip"><b>Costura familiar</b>Reparaciones, transformaciones y ajustes de ropa.
+                    </div>
+                    <div class="curso-chip"><b>Auxiliar administrativo</b>Facturación, libros simples y trámites
+                        básicos.</div>
+                    <div class="curso-chip"><b>Seguridad e higiene</b>Normas para construcción, electricidad y
+                        servicios.</div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <span>© C.E.A. "Catavi" — Llallagua, Potosí, Bolivia</span>
+            <span>Sitio Web 3D — Blender · Three.js · WebGL</span>
+        </footer>
+    </div>
+    <script src="js/libs/three.js"></script>
+    <script src="js/libs/fflate.min.js"></script>
+    <script src="js/libs/FBXLoader.js"></script>
+    <script src="js/fondo3d.js"></script>
+    <script>
+        document.querySelectorAll('a[href]').forEach(function (a) {
+            var href = a.getAttribute('href');
+            if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto') || href.startsWith('tel')) return;
+            a.addEventListener('click', function (e) {
+                e.preventDefault();
+                var p = document.getElementById('pagina');
+                if (p) p.style.animation = 'slideSalir 0.35s ease forwards';
+                setTimeout(function () { window.location.href = href; }, 360);
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería — C.E.A. "Catavi"</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        #fondo-3d {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        #fondo-3d canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .scrim-3d {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background: rgba(10, 14, 20, 0.65);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="fondo-3d"></div>
+    <div class="scrim-3d"></div>
+    <div id="pagina">
+        <nav class="nav-hero">
+            <div class="brand"><span class="brand-mark">CEA</span> C.E.A. "Catavi"</div>
+            <div class="nav-links">
+                <a href="index.html">Inicio</a>
+                <a href="institucion.html">Institución</a>
+                <a href="historia.html">Historia</a>
+                <a href="oferta.html">Oferta</a>
+                <a href="noticias.html">Noticias</a>
+                <a href="galeria.html" class="active">Galería</a>
+                <a href="modelo3d.html">Modelo 3D</a>
+                <a href="contacto.html">Contacto</a>
+            </div>
+        </nav>
+
+        <header class="page-head">
+            <div class="page-eyebrow"><span class="dash"></span> Identidad Visual</div>
+            <h1>Galería de <span class="accent">Imágenes</span></h1>
+            <p class="sub">El edificio real fotografiado en Catavi, y los momentos destacados de nuestras actividades
+                académicas y comunitarias.</p>
+        </header>
+
+        <section class="galeria-section" style="border-top: none; padding-top: 0;">
+            <div class="galeria-grid">
+                <div class="g-foto"><img src="images/hero-cea.jpg" alt="Fachada principal">
+                    <div class="cap">Fachada principal — fotografía propia, Catavi</div>
+                </div>
+                <div class="g-foto"><img src="images/g1.jpg" alt="Vista frontal">
+                    <div class="cap">Vista frontal — muro de ladrillo y escalinata</div>
+                </div>
+                <div class="g-foto"><img src="images/g2.jpg" alt="Letrero institucional">
+                    <div class="cap">Letrero institucional y claraboya central</div>
+                </div>
+                <div class="g-foto"><img src="images/g3.jpg" alt="Bloque lateral">
+                    <div class="cap">Bloque lateral, fachada ocre de tres niveles</div>
+                </div>
+                <div class="g-foto"><img src="images/g4.jpg" alt="Vista en perspectiva">
+                    <div class="cap">Vista en perspectiva desde la calle de acceso</div>
+                </div>
+                <div class="g-foto"><img src="images/g5.jpg" alt="Acceso principal">
+                    <div class="cap">Acceso principal del centro</div>
+                </div>
+                <div class="g-foto"><img src="images/aulas.jpeg" alt="Clases prácticas">
+                    <div class="cap">Clases prácticas en talleres</div>
+                </div>
+                <div class="g-foto"><img src="images/foto.jpg" alt="Acto de graduación">
+                    <div class="cap">Acto de graduación de promociones</div>
+                </div>
+                <div class="g-foto"><img src="images/deportes.jfif" alt="Jornada deportiva">
+                    <div class="cap">Jornada deportiva inter-cursos</div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <span>© C.E.A. "Catavi" — Llallagua, Potosí, Bolivia</span>
+            <span>Sitio Web 3D — Blender · Three.js · WebGL</span>
+        </footer>
+    </div>
+    <script src="js/libs/three.js"></script>
+    <script src="js/libs/fflate.min.js"></script>
+    <script src="js/libs/FBXLoader.js"></script>
+    <script src="js/fondo3d.js"></script>
+    <script>
+        document.querySelectorAll('a[href]').forEach(function (a) {
+            var href = a.getAttribute('href');
+            if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto') || href.startsWith('tel')) return;
+            a.addEventListener('click', function (e) {
+                e.preventDefault();
+                var p = document.getElementById('pagina');
+                if (p) p.style.animation = 'slideSalir 0.35s ease forwards';
+                setTimeout(function () { window.location.href = href; }, 360);
+            });
+        });
+    </script>
+</body>
+
+</html>

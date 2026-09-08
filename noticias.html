@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noticias — C.E.A. "Catavi"</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        #fondo-3d {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        #fondo-3d canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .scrim-3d {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background: rgba(10, 14, 20, 0.65);
+        }
+
+        .news-date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--ocre);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="fondo-3d"></div>
+    <div class="scrim-3d"></div>
+    <div id="pagina">
+        <nav class="nav-hero">
+            <div class="brand"><span class="brand-mark">CEA</span> C.E.A. "Catavi"</div>
+            <div class="nav-links">
+                <a href="index.html">Inicio</a>
+                <a href="institucion.html">Institución</a>
+                <a href="historia.html">Historia</a>
+                <a href="oferta.html">Oferta</a>
+                <a href="noticias.html" class="active">Noticias</a>
+                <a href="galeria.html">Galería</a>
+                <a href="modelo3d.html">Modelo 3D</a>
+                <a href="contacto.html">Contacto</a>
+            </div>
+        </nav>
+
+        <header class="page-head">
+            <div class="page-eyebrow"><span class="dash"></span> Actualidad</div>
+            <h1>Noticias y <span class="accent">Eventos</span></h1>
+            <p class="sub">Mantente informado sobre las actividades, logros y la vida diaria de nuestra comunidad
+                educativa.</p>
+        </header>
+
+        <section class="programas-section">
+            <div class="grid-talleres">
+                <div class="taller">
+                    <span class="news-date">15 de Agosto, 2024</span>
+                    <h3>Feria Técnica 2024</h3>
+                    <p>Estudiantes de formación técnica presentaron proyectos innovadores de robótica educativa,
+                        electricidad y energías alternativas ante la comunidad.</p>
+                </div>
+                <div class="taller">
+                    <span class="news-date">6 de Agosto, 2024</span>
+                    <h3>Desfile Cívico por la Independencia</h3>
+                    <p>Nuestra institución participó activamente del homenaje a la independencia de Bolivia con bandas
+                        estudiantiles y estandartes representativos.</p>
+                </div>
+                <div class="taller">
+                    <span class="news-date">17 de Agosto, 2024</span>
+                    <h3>¡Cumplimos 52 años de vida institucional!</h3>
+                    <p>Un año más de vida institucional, cumpliendo con la enseñanza educacional y formando a las nuevas
+                        generaciones del norte de Potosí.</p>
+                </div>
+                <div class="taller">
+                    <span class="news-date">10 de Septiembre, 2024</span>
+                    <h3>Inscripciones Abiertas: Gestión 2025</h3>
+                    <p>Ya puedes inscribirte en nuestras carreras técnicas y niveles humanísticos. Horarios flexibles y
+                        matrícula gratuita. ¡Te esperamos!</p>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <span>© C.E.A. "Catavi" — Llallagua, Potosí, Bolivia</span>
+            <span>Sitio Web 3D — Blender · Three.js · WebGL</span>
+        </footer>
+    </div>
+    <script src="js/libs/three.js"></script>
+    <script src="js/libs/fflate.min.js"></script>
+    <script src="js/libs/FBXLoader.js"></script>
+    <script src="js/fondo3d.js"></script>
+    <script>
+        document.querySelectorAll('a[href]').forEach(function (a) {
+            var href = a.getAttribute('href');
+            if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto') || href.startsWith('tel')) return;
+            a.addEventListener('click', function (e) {
+                e.preventDefault();
+                var p = document.getElementById('pagina');
+                if (p) p.style.animation = 'slideSalir 0.35s ease forwards';
+                setTimeout(function () { window.location.href = href; }, 360);
+            });
+        });
+    </script>
+</body>
+
+</html>

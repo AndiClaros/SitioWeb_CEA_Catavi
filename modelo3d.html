@@ -312,6 +312,76 @@
       opacity: 0;
       transition: opacity 0.4s;
     }
+
+    #explorador-menu-wrap {
+      position: fixed;
+      top: 1rem;
+      right: 8.5rem;
+      z-index: 200;
+      display: none;
+      /* el JS lo pone en "flex" solo en modo explorador */
+    }
+
+    #btn-explorador-menu {
+      background: rgba(10, 14, 20, 0.85);
+      color: #f0ebe0;
+      border: 1px solid #ffffff22;
+      border-radius: 6px;
+      width: 36px;
+      height: 36px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+      transition: border-color .2s, color .2s;
+    }
+
+    #btn-explorador-menu:hover {
+      border-color: #e8c87a;
+      color: #e8c87a;
+    }
+
+    #explorador-menu {
+      position: absolute;
+      top: calc(100% + 0.5rem);
+      right: 0;
+      min-width: 220px;
+      background: rgba(10, 14, 20, 0.95);
+      border: 1px solid #ffffff14;
+      border-radius: 6px;
+      padding: 1rem 1.1rem;
+      display: none;
+      flex-direction: column;
+      gap: 0.7rem;
+      backdrop-filter: blur(8px);
+    }
+
+    #explorador-menu.is-open {
+      display: flex;
+    }
+
+    #explorador-menu .titulo {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #8b8f9a;
+    }
+
+    .modo-grupo-vertical {
+      flex-direction: column;
+    }
+
+    .explorador-menu-ayuda {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      line-height: 1.8;
+      color: #c7cad3;
+      margin: 0;
+    }
+
+    .explorador-menu-ayuda b {
+      color: #e8c87a;
+    }
   </style>
 </head>
 
@@ -334,6 +404,24 @@
   <!-- Estos 3 elementos son position:fixed y van FUERA de #pagina
      para que no se vean afectados por la animación de slide -->
   <button id="btn-salir-visor">← Salir</button>
+  <div id="explorador-menu-wrap">
+    <button id="btn-explorador-menu" title="Más opciones">⋮</button>
+    <div id="explorador-menu">
+      <span class="titulo">Ambiente</span>
+      <div class="modo-grupo modo-grupo-vertical">
+        <button class="btn-modo is-active" data-modo="dia">☀️ Día</button>
+        <button class="btn-modo" data-modo="atardecer">🌇 Tarde</button>
+        <button class="btn-modo" data-modo="noche">🌙 Noche</button>
+      </div>
+      <span class="titulo">Controles</span>
+      <p class="explorador-menu-ayuda">
+        <b>WASD</b> — moverte<br>
+        <b>Q / E</b> — subir / bajar<br>
+        <b>Mouse</b> — mirar alrededor<br>
+        <b>ESC</b> — salir del modo explorador
+      </p>
+    </div>
+  </div>
   <div id="visor-controles">
     <div class="canvas-controls-hint">
       <span><b>Arrastrar</b> — rotar</span>
@@ -342,7 +430,7 @@
     </div>
     <div class="canvas-toolbar">
       <div class="modo-grupo">
-        <button class="btn-modo is-active" id="btn-modo-dia">
+        <button class="btn-modo is-active" id="btn-modo-dia" data-modo="dia">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="5" />
             <path
@@ -350,7 +438,7 @@
           </svg>
           Día
         </button>
-        <button class="btn-modo" id="btn-modo-atardecer">
+        <button class="btn-modo" id="btn-modo-atardecer" data-modo="atardecer">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 8a4 4 0 0 1 4 4H8a4 4 0 0 1 4-4z" />
             <path d="M12 2v2M4.22 6.22l1.42 1.42M2 14h2M20 14h2M18.36 6.22l-1.42 1.42" />
@@ -358,17 +446,12 @@
           </svg>
           Tarde
         </button>
-        <button class="btn-modo" id="btn-modo-noche">
+        <button class="btn-modo" id="btn-modo-noche" data-modo="noche">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
           </svg>
           Noche
         </button>
-        <div class="modo-grupo">
-          <button class="btn-modo" id="btn-cal-alta">Alta</button>
-          <button class="btn-modo is-active" id="btn-cal-media">Media</button>
-          <button class="btn-modo" id="btn-cal-baja">Baja</button>
-        </div>
       </div>
       <div class="toolbar-wrap">
         <button class="tool-btn icon-only" id="btn-luces" title="Iluminación">
@@ -428,8 +511,13 @@
       <div class="brand"><span class="brand-mark">CEA</span> C.E.A. "Catavi"</div>
       <div class="nav-links">
         <a href="index.html">Inicio</a>
-        <a href="historia.html">Historia &amp; Programas</a>
-        <a href="modelo3d.html" class="active">Modelo 3D</a>
+        <a href="institucion.html">Institución</a>
+        <a href="historia.html">Historia</a>
+        <a href="oferta.html">Oferta</a>
+        <a href="noticias.html">Noticias</a>
+        <a href="galeria.html">Galería</a>
+        <a href="modelo3d.html">Modelo 3D</a>
+        <a href="contacto.html">Contacto</a>
       </div>
     </nav>
     <div id="vista-intro">

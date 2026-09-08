@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Institución — C.E.A. "Catavi"</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        #fondo-3d {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        #fondo-3d canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* ← FONDO MÁS CLARO (igual que en Inicio) */
+        .scrim-3d {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background: rgba(10, 14, 20, 0.35);
+        }
+
+        /* ← ELIMINAR CUADRO OSCURO DEL HEADER */
+        header.page-head {
+            background: transparent !important;
+            backdrop-filter: none !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+
+        .grid-talleres {
+            grid-template-columns: repeat(3, 1fr) !important;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="fondo-3d"></div>
+    <div class="scrim-3d"></div>
+    <div id="pagina">
+        <nav class="nav-hero">
+            <div class="brand"><span class="brand-mark">CEA</span> C.E.A. "Catavi"</div>
+            <div class="nav-links">
+                <a href="index.html">Inicio</a>
+                <a href="institucion.html" class="active">Institución</a>
+                <a href="historia.html">Historia</a>
+                <a href="oferta.html">Oferta</a>
+                <a href="noticias.html">Noticias</a>
+                <a href="galeria.html">Galería</a>
+                <a href="modelo3d.html">Modelo 3D</a>
+                <a href="contacto.html">Contacto</a>
+            </div>
+        </nav>
+
+        <!-- HEADER SIN CUADRO OSCURO -->
+        <header class="page-head">
+            <div class="page-eyebrow"><span class="dash"></span> Nuestra Identidad</div>
+            <h1>Formando el futuro técnico y humanístico de <span class="accent">Llallagua</span>.</h1>
+            <p class="sub">Comprometidos con una educación inclusiva, intercultural y comunitaria, heredera de la lucha
+                y el esfuerzo del pueblo minero.</p>
+        </header>
+
+        <!-- SOLO 3 PILARES (Misión, Visión, Valores) -->
+        <section class="programas-section">
+            <div class="programas-head">
+                <h2>Pilares de nuestra institución.</h2>
+                <span class="note">Guiados por el lema: "Nunca es tarde para aprender".</span>
+            </div>
+            <div class="grid-talleres">
+                <div class="taller">
+                    <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M12 16v-4M12 8h.01" />
+                        </svg></div>
+                    <h3>Misión</h3>
+                    <p>Brindar una formación humanística y técnico-tecnológica que desarrolle competencias para la vida,
+                        con identidad cultural, respeto y compromiso social.</p>
+                </div>
+                <div class="taller">
+                    <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                            <circle cx="12" cy="12" r="3" />
+                        </svg></div>
+                    <h3>Visión</h3>
+                    <p>Ser una institución referente en el norte de Potosí por su excelencia académica, innovación
+                        pedagógica y participación activa en el desarrollo comunitario.</p>
+                </div>
+                <div class="taller">
+                    <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg></div>
+                    <h3>Valores</h3>
+                    <p>Responsabilidad, Respeto, Inclusión, Solidaridad y Excelencia Académica. Trabajamos unidos para
+                        el desarrollo integral de nuestros estudiantes.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN DEL ESCUDO ELIMINADA COMPLETAMENTE -->
+
+        <footer>
+            <span>© C.E.A. "Catavi" — Llallagua, Potosí, Bolivia</span>
+            <span>Sitio Web 3D — Blender · Three.js · WebGL</span>
+        </footer>
+    </div>
+    <script src="js/libs/three.js"></script>
+    <script src="js/libs/fflate.min.js"></script>
+    <script src="js/libs/FBXLoader.js"></script>
+    <script src="js/fondo3d.js"></script>
+    <script>
+        document.querySelectorAll('a[href]').forEach(function (a) {
+            var href = a.getAttribute('href');
+            if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto') || href.startsWith('tel')) return;
+            a.addEventListener('click', function (e) {
+                e.preventDefault();
+                var p = document.getElementById('pagina');
+                if (p) p.style.animation = 'slideSalir 0.35s ease forwards';
+                setTimeout(function () { window.location.href = href; }, 360);
+            });
+        });
+    </script>
+</body>
+
+</html>

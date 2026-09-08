@@ -55,6 +55,7 @@ function entrarVisor(iniciarTour) {
     setTimeout(function () { ctrl.style.opacity = '1'; btnS.style.opacity = '1'; }, 30);
   }, 400);
   if (!controlesIniciados) { controlesIniciados = true; initControlesVisor(); }
+  aplicarCalidad();
   aplicarModo('dia');
   if (iniciarTour) setTimeout(iniciarRecorrido, 500);
   else reiniciarIdleV();
@@ -64,7 +65,6 @@ function salirVisor() {
   if (modoExplorador) salirExplorador();
   enRecorrido = false; autoRotarV = false; clearTimeout(idleTimerV);
   anguloFondo = anguloHV; visorActivo = false;
-  quitarClima();
   document.getElementById('fondo-3d').style.pointerEvents = 'none';
   document.querySelector('nav').style.opacity = '1';
   document.querySelector('nav').style.pointerEvents = 'auto';
@@ -92,12 +92,10 @@ function aplicarModo(nombre) {
   if (sA) { sA.value = m.sAmb; document.getElementById('val-ambiental').textContent = m.sAmb + '%'; }
   if (sD) { sD.value = m.sDir; document.getElementById('val-direccional').textContent = m.sDir + '%'; }
   if (sP) { sP.value = m.sPun; document.getElementById('val-puntual').textContent = m.sPun + '%'; }
-  document.querySelectorAll('.btn-modo').forEach(function (b) { b.classList.remove('is-active'); });
-  var ba = document.getElementById('btn-modo-' + nombre);
-  if (ba) ba.classList.add('is-active');
-  if (nombre === 'noche') crearLluvia();
-  else if (nombre === 'atardecer') crearNieve();
-  else quitarClima();
+  // Marca activo el botón de modo tanto en la barra normal como en el
+  // menú de 3 puntos del explorador (comparten la misma clase .btn-modo).
+  document.querySelectorAll('.btn-modo[data-modo]').forEach(function (b) { b.classList.remove('is-active'); });
+  document.querySelectorAll('.btn-modo[data-modo="' + nombre + '"]').forEach(function (b) { b.classList.add('is-active'); });
 }
 
 function lerp(a, b, t) { return a + (b - a) * t; }
@@ -123,6 +121,7 @@ function actualizarRecorrido() {
   camera3d.lookAt(lerp(desde.obj.x, hasta.obj.x, t), lerp(desde.obj.y, hasta.obj.y, t), lerp(desde.obj.z, hasta.obj.z, t));
 }
 
+// ===== MODO EXPLORADOR =====
 function iniciarExplorador() {
   modoExplorador = true; exploradorYaw = anguloHV; exploradorPitch = 0;
   exploradorPos = new THREE.Vector3(camera3d.position.x, 1.7, camera3d.position.z);
@@ -132,8 +131,14 @@ function iniciarExplorador() {
   document.querySelector('.canvas-controls-hint').style.display = 'flex';
   document.getElementById('visor-controles').style.pointerEvents = 'none';
   document.getElementById('btn-explorador').style.pointerEvents = 'auto';
+
+  // El menú de 3 puntos SÍ debe funcionar aunque el resto de la barra
+  // esté desactivada, por eso vive fuera de #visor-controles.
+  var menuWrap = document.getElementById('explorador-menu-wrap');
+  if (menuWrap) menuWrap.style.display = 'flex';
+
   var ov = document.getElementById('explorador-overlay');
-  if (ov) { ov.style.opacity = '1'; setTimeout(function () { ov.style.opacity = '0'; }, 3000); }
+  if (ov) { ov.style.opacity = '1'; setTimeout(function () { ov.style.opacity = '0'; }, 4500); }
 }
 function salirExplorador() {
   modoExplorador = false; document.exitPointerLock();
@@ -141,18 +146,48 @@ function salirExplorador() {
   if (btn) { btn.classList.remove('is-active'); btn.textContent = '🚶 Explorar'; }
   document.querySelector('.canvas-controls-hint').style.display = 'none';
   document.getElementById('visor-controles').style.pointerEvents = 'auto';
+
+  var menuWrap = document.getElementById('explorador-menu-wrap');
+  if (menuWrap) {
+    menuWrap.style.display = 'none';
+    document.getElementById('explorador-menu').classList.remove('is-open');
+  }
 }
+
 function actualizarExplorador() {
   var cosY = Math.cos(exploradorYaw), sinY = Math.sin(exploradorYaw);
   var adelante = new THREE.Vector3(-sinY, 0, -cosY);
   var derecha = new THREE.Vector3(cosY, 0, -sinY);
-  if (teclas.w) exploradorPos.addScaledVector(adelante, VEL_EXP);
-  if (teclas.s) exploradorPos.addScaledVector(adelante, -VEL_EXP);
-  if (teclas.a) exploradorPos.addScaledVector(derecha, -VEL_EXP);
-  if (teclas.d) exploradorPos.addScaledVector(derecha, VEL_EXP);
-  if (teclas.q) exploradorPos.y += VEL_EXP;
-  if (teclas.e) exploradorPos.y -= VEL_EXP;
-  exploradorPos.y = Math.max(1.7, exploradorPos.y);
+
+  var nuevaPos = exploradorPos.clone();
+
+  // === MOVIMIENTO HORIZONTAL ===
+  if (teclas.w) nuevaPos.addScaledVector(adelante, VEL_EXP);
+  if (teclas.s) nuevaPos.addScaledVector(adelante, -VEL_EXP);
+  if (teclas.a) nuevaPos.addScaledVector(derecha, -VEL_EXP);
+  if (teclas.d) nuevaPos.addScaledVector(derecha, VEL_EXP);
+
+  // === MODO VUELO (Q/E) ===
+  var volando = (teclas.q || teclas.e);
+  if (teclas.q) nuevaPos.y += VEL_EXP;
+  if (teclas.e) nuevaPos.y -= VEL_EXP;
+
+  // === APLICAR COLISIONES (solo si no está volando) ===
+  if (!volando) {
+    // 1. Colisión con paredes (horizontal)
+    nuevaPos = aplicarColisionParedes(exploradorPos, nuevaPos);
+
+    // 2. Detección de suelo/escaleras (vertical)
+    nuevaPos.y = detectarSuelo(nuevaPos);
+  }
+
+  // === LÍMITE INFERIOR (no caer bajo el piso) ===
+  if (!teclas.e) {
+    nuevaPos.y = Math.max(ALTURA_OJOS, nuevaPos.y);
+  }
+
+  exploradorPos.copy(nuevaPos);
+
   camera3d.position.copy(exploradorPos);
   camera3d.lookAt(
     exploradorPos.x - sinY * 10,
@@ -221,9 +256,12 @@ function initControlesVisor() {
   if (bTour) bTour.addEventListener('click', function () { if (enRecorrido) detenerRecorrido(); else iniciarRecorrido(); });
   if (bExp) bExp.addEventListener('click', function () { if (modoExplorador) salirExplorador(); else iniciarExplorador(); });
 
-  document.getElementById('btn-modo-dia').addEventListener('click', function () { aplicarModo('dia'); });
-  document.getElementById('btn-modo-atardecer').addEventListener('click', function () { aplicarModo('atardecer'); });
-  document.getElementById('btn-modo-noche').addEventListener('click', function () { aplicarModo('noche'); });
+  // Botones de modo (Día/Atardecer/Noche): tanto los de la barra normal
+  // como los que están dentro del menú de 3 puntos usan data-modo, así
+  // que un solo listener delegado sirve para ambos.
+  document.querySelectorAll('.btn-modo[data-modo]').forEach(function (b) {
+    b.addEventListener('click', function () { aplicarModo(b.getAttribute('data-modo')); });
+  });
 
   var sA = document.getElementById('slider-ambiental');
   var sD = document.getElementById('slider-direccional');
@@ -252,16 +290,13 @@ function initControlesVisor() {
     });
   }
 
-  var bCalta = document.getElementById('btn-cal-alta');
-  var bCmedia = document.getElementById('btn-cal-media');
-  var bCbaja = document.getElementById('btn-cal-baja');
-  function marcarCalidad(activo) {
-    [bCalta, bCmedia, bCbaja].forEach(function (b) { if (b) b.classList.remove('is-active'); });
-    if (activo) activo.classList.add('is-active');
+  // ===== Menú de 3 puntos (solo visible en modo explorador) =====
+  var bMenu = document.getElementById('btn-explorador-menu');
+  var pMenu = document.getElementById('explorador-menu');
+  if (bMenu && pMenu) {
+    bMenu.addEventListener('click', function (e) { e.stopPropagation(); pMenu.classList.toggle('is-open'); });
+    document.addEventListener('click', function (e) { if (!pMenu.contains(e.target) && e.target !== bMenu) pMenu.classList.remove('is-open'); });
   }
-  if (bCalta) bCalta.addEventListener('click', function () { aplicarCalidad('alta'); marcarCalidad(bCalta); });
-  if (bCmedia) bCmedia.addEventListener('click', function () { aplicarCalidad('media'); marcarCalidad(bCmedia); });
-  if (bCbaja) bCbaja.addEventListener('click', function () { aplicarCalidad('baja'); marcarCalidad(bCbaja); });
 }
 
 document.getElementById('btn-entrar').addEventListener('click', function () { entrarVisor(false); });
