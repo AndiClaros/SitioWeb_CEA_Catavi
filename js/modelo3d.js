@@ -1,19 +1,19 @@
-var radioV = 30, anguloHV = 0, anguloVV = 0.25, objetivoV;
+var radioV = 10, anguloHV = 0, anguloVV = 0.25, objetivoV;
 var arrastrando = false, ultimoX = 0, ultimoY = 0;
 var autoRotarV = false, idleTimerV = null, IDLE_MS = 20000;
 var enRecorrido = false, puntoActual = 0, progresoTour = 0;
 var puntosTour = [
-  { pos: { x: 0, y: 6, z: 30 }, obj: { x: 0, y: 4, z: 0 } },
-  { pos: { x: 28, y: 8, z: 18 }, obj: { x: 0, y: 4, z: 0 } },
-  { pos: { x: 32, y: 5, z: 0 }, obj: { x: 0, y: 4, z: 0 } },
-  { pos: { x: 18, y: 12, z: -22 }, obj: { x: 0, y: 4, z: 0 } },
-  { pos: { x: -28, y: 8, z: 18 }, obj: { x: 0, y: 4, z: 0 } },
-  { pos: { x: 0, y: 22, z: 12 }, obj: { x: 0, y: 0, z: 0 } }
+  { pos: { x: 0, y: 18, z: 65 }, obj: { x: 0, y: 4, z: 0 } },
+  { pos: { x: 40, y: 15, z: 30 }, obj: { x: 0, y: 4, z: 0 } },
+  { pos: { x: 45, y: 12, z: 0 }, obj: { x: 0, y: 4, z: 0 } },
+  { pos: { x: 25, y: 18, z: -35 }, obj: { x: 0, y: 4, z: 0 } },
+  { pos: { x: -40, y: 15, z: 30 }, obj: { x: 0, y: 4, z: 0 } },
+  { pos: { x: 0, y: 35, z: 20 }, obj: { x: 0, y: 0, z: 0 } }
 ];
 var modoExplorador = false;
 var teclas = { w: false, a: false, s: false, d: false, q: false, e: false };
 var exploradorPos, exploradorYaw = 0, exploradorPitch = 0;
-var VEL_EXP = 0.12;
+var VEL_EXP = 0.32;
 var controlesIniciados = false;
 
 var modos = {
@@ -114,7 +114,7 @@ function detenerRecorrido() {
 function actualizarRecorrido() {
   var desde = puntosTour[puntoActual];
   var hasta = puntosTour[(puntoActual + 1) % puntosTour.length];
-  progresoTour += 0.004;
+  progresoTour += 0.01;
   if (progresoTour >= 1) { progresoTour = 0; puntoActual = (puntoActual + 1) % puntosTour.length; }
   var t = progresoTour * progresoTour * (3 - 2 * progresoTour);
   camera3d.position.set(lerp(desde.pos.x, hasta.pos.x, t), lerp(desde.pos.y, hasta.pos.y, t), lerp(desde.pos.z, hasta.pos.z, t));

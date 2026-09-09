@@ -4,8 +4,8 @@ var luzAmb3d, luzDir3d, luzPun3d;
 var anguloFondo = -0.3;
 var visorActivo = false;
 
-var camaraDestX = 0, camaraDestY = 7, camaraDestZ = 22;
-var camaraActX = 0, camaraActY = 7, camaraActZ = 22;
+var camaraDestX = 0, camaraDestY = 7, camaraDestZ = 35;
+var camaraActX = 0, camaraActY = 7, camaraActZ = 35;
 var lookDestX = 0, lookDestY = 4, lookDestZ = 0;
 var lookActX = 0, lookActY = 4, lookActZ = 0;
 
@@ -16,7 +16,6 @@ var IDLE_MODELO = 20000;
 var IDLE_OTROS = 1500;
 
 var sistemaClima = null;
-var velocidadClima = 0;
 
 var keyframes = [
   { scroll: 0.00, x: 0, y: 7, z: 22, lx: 0, ly: 4, lz: 0 },
@@ -26,11 +25,11 @@ var keyframes = [
   { scroll: 1.00, x: 0, y: 7, z: 22, lx: 0, ly: 4, lz: 0 }
 ];
 
-// ===== SISTEMA DE COLISIONES UNIFICADO =====
+// ===== COLISIONES  =====
 var objetosPared = [];
 var objetosSuelo = [];
 var RADIO_JUGADOR = 0.4;
-var ALTURA_OJOS = 1.7;
+var ALTURA_OJOS = 1.8;
 var ALTURA_MAX_PASO = 0.45;
 var raycasterCol = new THREE.Raycaster();
 var dirAux = new THREE.Vector3();
@@ -48,37 +47,7 @@ function aplicarCalidad(nivel) {
     renderer3d.shadowMap.enabled = true;
     luzDir3d.shadow.mapSize.width = 2048;
     luzDir3d.shadow.mapSize.height = 2048;
-  } else if (nivel === 'media') {
-    renderer3d.setPixelRatio(1);
-    renderer3d.shadowMap.enabled = true;
-    luzDir3d.shadow.mapSize.width = 1024;
-    luzDir3d.shadow.mapSize.height = 1024;
-  } else {
-    renderer3d.setPixelRatio(0.75);
-    renderer3d.shadowMap.enabled = false;
   }
-}
-
-function crearParticulasClima(color, size, opacidad, cantidad, velocidad) {
-  if (sistemaClima) scene3d.remove(sistemaClima);
-  var geo = new THREE.BufferGeometry();
-  var pos = new Float32Array(cantidad * 3);
-  for (var i = 0; i < cantidad * 3; i += 3) {
-    pos[i] = (Math.random() - 0.5) * 80;
-    pos[i + 1] = Math.random() * 40;
-    pos[i + 2] = (Math.random() - 0.5) * 80;
-  }
-  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-  var mat = new THREE.PointsMaterial({ color: color, size: size, transparent: true, opacity: opacidad });
-  sistemaClima = new THREE.Points(geo, mat);
-  velocidadClima = velocidad;
-  scene3d.add(sistemaClima);
-}
-
-function crearLluvia() { crearParticulasClima(0xaaaacc, 0.12, 0.6, 2000, 0.35); }
-function crearNieve() { crearParticulasClima(0xffffff, 0.28, 0.85, 1200, 0.06); }
-function quitarClima() {
-  if (sistemaClima) { scene3d.remove(sistemaClima); sistemaClima = null; velocidadClima = 0; }
 }
 
 function ocultarPantallaCarga() {
@@ -109,7 +78,7 @@ function aplicarMaterialesPorNombre(objetoRaiz) {
     var nombreOriginal = (child.name || '').toLowerCase();
     var n = baseNombre(child.name || '');
 
-    // === 1. DETECTAR VIDRIOS (hacerlos transparentes) ===
+    // === DETECTAR VIDRIOS ===
     var esVidrio = false;
 
     if (nombreOriginal.indexOf('vidrio') !== -1 ||
@@ -182,13 +151,11 @@ function aplicarMaterialesPorNombre(objetoRaiz) {
       return;
     }
 
-    // === 2. FORZAR COLORES PARA TECHO Y GRADAS (evitar que se vean negros) ===
     if (n === 'Techo') {
       child.material = new THREE.MeshLambertMaterial({ color: 0xB54438, side: THREE.DoubleSide });
       return;
     }
 
-    // === 3. GRADAS ===
     if (n === 'Grada' || nombreOriginal.indexOf('grada') !== -1) {
       if (Array.isArray(child.material)) {
         child.material = child.material.map(function (mat) {
@@ -219,7 +186,7 @@ function aplicarMaterialesPorNombre(objetoRaiz) {
       return;
     }
 
-    // === 4. TODO LO DEMÁS: Respetar colores del FBX ===
+    // colores del FBX ===
     if (Array.isArray(child.material)) {
       child.material = child.material.map(function (mat) {
         mat.wireframe = false;
@@ -241,7 +208,7 @@ function prepararColisiones(objetoRaiz) {
     if (!child.isMesh) return;
     var n = (child.name || '').toLowerCase();
 
-    // === PAREDES / BLOQUEANTES ===
+    // === BLOQUEADOS ===
     if (n === 'edificio' ||
       n === 'murodevidrio' ||
       n.indexOf('vent_media') === 0 ||
@@ -261,6 +228,8 @@ function prepararColisiones(objetoRaiz) {
   console.log('   Paredes:', objetosPared.length, 'objetos');
   console.log('   Suelos:', objetosSuelo.length, 'objetos');
 }
+
+// === MOVIMIENTO ===
 
 function aplicarColisionParedes(posActual, posNueva) {
   if (objetosPared.length === 0) return posNueva;
@@ -319,69 +288,6 @@ function detectarSuelo(posJugador) {
   return posJugador.y;
 }
 
-function crearTexturaTierraConCespedYPiedras() {
-  var canvas = document.createElement('canvas');
-  canvas.width = 512;
-  canvas.height = 512;
-  var ctx = canvas.getContext('2d');
-
-  ctx.fillStyle = '#6B5637';
-  ctx.fillRect(0, 0, 512, 512);
-
-  for (var i = 0; i < 150; i++) {
-    var x = Math.random() * 512;
-    var y = Math.random() * 512;
-    var r = Math.random() * 40 + 20;
-    var tono = Math.random() > 0.5 ? 'rgba(90,70,50,0.25)' : 'rgba(50,38,25,0.25)';
-    ctx.fillStyle = tono;
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  for (var j = 0; j < 80; j++) {
-    var cx = Math.random() * 512;
-    var cy = Math.random() * 512;
-    var cr = Math.random() * 35 + 15;
-    var verdeBase = 80 + Math.random() * 60;
-    ctx.fillStyle = 'rgba(' + (verdeBase - 40) + ',' + verdeBase + ',' + (verdeBase - 50) + ',0.6)';
-    ctx.beginPath();
-    ctx.arc(cx, cy, cr, 0, Math.PI * 2);
-    ctx.fill();
-
-    for (var k = 0; k < 15; k++) {
-      var bx = cx + (Math.random() - 0.5) * cr * 2;
-      var by = cy + (Math.random() - 0.5) * cr * 2;
-      var alto = Math.random() * 6 + 3;
-      var verdeBrizna = 100 + Math.random() * 80;
-      ctx.strokeStyle = 'rgba(' + (verdeBrizna - 50) + ',' + verdeBrizna + ',' + (verdeBrizna - 60) + ',0.7)';
-      ctx.lineWidth = 1.2;
-      ctx.beginPath();
-      ctx.moveTo(bx, by);
-      ctx.lineTo(bx + (Math.random() - 0.5) * 3, by - alto);
-      ctx.stroke();
-    }
-  }
-
-  for (var p = 0; p < 800; p++) {
-    var px = Math.random() * 512;
-    var py = Math.random() * 512;
-    var pr = Math.random() * 3 + 0.8;
-    var gris = 60 + Math.random() * 80;
-    ctx.fillStyle = 'rgba(' + gris + ',' + (gris - 8) + ',' + (gris - 18) + ',' + (0.5 + Math.random() * 0.4) + ')';
-    ctx.beginPath();
-    ctx.arc(px, py, pr, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  var textura = new THREE.CanvasTexture(canvas);
-  textura.wrapS = THREE.RepeatWrapping;
-  textura.wrapT = THREE.RepeatWrapping;
-  textura.repeat.set(25, 25);
-  textura.anisotropy = renderer3d.capabilities.getMaxAnisotropy();
-  return textura;
-}
-
 function initFondo3D() {
   scene3d = new THREE.Scene();
   scene3d.background = new THREE.Color(0x87CEEB);
@@ -389,7 +295,7 @@ function initFondo3D() {
   objetivoFondo = new THREE.Vector3(0, 4, 0);
 
   camera3d = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera3d.position.set(0, 8, 22);
+  camera3d.position.set(0, 8, 35);
   camera3d.lookAt(objetivoFondo);
 
   renderer3d = new THREE.WebGLRenderer({ antialias: true });
@@ -402,7 +308,7 @@ function initFondo3D() {
   var piso = new THREE.Mesh(
     new THREE.PlaneGeometry(200, 200),
     new THREE.MeshLambertMaterial({
-      map: crearTexturaTierraConCespedYPiedras()
+      color: 0x2a2520
     })
   );
   piso.rotation.x = -Math.PI / 2;
@@ -446,7 +352,7 @@ function initFondo3D() {
       objeto.position.set(-centro.x, -caja.min.y, -centro.z);
 
       aplicarMaterialesPorNombre(objeto);
-      prepararColisiones(objeto); // ← ESTO AHORA SÍ LLENA LAS VARIABLES CORRECTAS
+      prepararColisiones(objeto);
 
       modeloFondo = objeto;
       scene3d.add(objeto);
@@ -474,32 +380,7 @@ function initFondo3D() {
   });
 
   window.addEventListener('scroll', function () {
-    if (visorActivo) return;
-    autoOrbitando = false;
-    clearTimeout(timerScroll);
-    var delay = enModeloPag ? IDLE_MODELO : IDLE_OTROS;
-    timerScroll = setTimeout(function () {
-      iniciarOrbitaDesde(camaraActX, camaraActY, camaraActZ);
-    }, delay);
-
-    var scrollMax = document.body.scrollHeight - window.innerHeight;
-    if (scrollMax <= 0) return;
-    var t = Math.max(0, Math.min(1, window.scrollY / scrollMax));
-
-    var desde = keyframes[0];
-    var hasta = keyframes[keyframes.length - 1];
-    for (var i = 0; i < keyframes.length - 1; i++) {
-      if (t >= keyframes[i].scroll && t <= keyframes[i + 1].scroll) {
-        desde = keyframes[i]; hasta = keyframes[i + 1]; break;
-      }
-    }
-    var p = (hasta.scroll === desde.scroll) ? 1 : (t - desde.scroll) / (hasta.scroll - desde.scroll);
-    camaraDestX = desde.x + (hasta.x - desde.x) * p;
-    camaraDestY = desde.y + (hasta.y - desde.y) * p;
-    camaraDestZ = desde.z + (hasta.z - desde.z) * p;
-    lookDestX = desde.lx + (hasta.lx - desde.lx) * p;
-    lookDestY = desde.ly + (hasta.ly - desde.ly) * p;
-    lookDestZ = desde.lz + (hasta.lz - desde.lz) * p;
+    // No hacer nada al hacer scroll
   });
 
   animarFondo();
@@ -513,9 +394,9 @@ function animarFondo() {
   } else if (modeloFondo) {
     if (autoOrbitando) {
       anguloFondo += 0.0008;
-      var nx = Math.sin(anguloFondo) * 22;
+      var nx = Math.sin(anguloFondo) * 35;
       var ny = 7 + Math.sin(anguloFondo * 0.3) * 2;
-      var nz = Math.cos(anguloFondo) * 22;
+      var nz = Math.cos(anguloFondo) * 35;
       camera3d.position.set(nx, ny, nz);
       camera3d.lookAt(objetivoFondo);
       camaraActX = nx; camaraActY = ny; camaraActZ = nz;
