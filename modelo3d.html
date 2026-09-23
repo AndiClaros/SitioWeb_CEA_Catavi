@@ -62,15 +62,8 @@
     }
 
     @keyframes pulseDot {
-
-      0%,
-      100% {
-        opacity: 0.4;
-      }
-
-      50% {
-        opacity: 1;
-      }
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
     }
 
     #vista-intro h1 {
@@ -193,9 +186,7 @@
       transition: background .2s, border-color .2s, color .2s;
     }
 
-    .btn-modo:hover {
-      color: #e8c87a;
-    }
+    .btn-modo:hover { color: #e8c87a; }
 
     .btn-modo.is-active {
       background: rgba(232, 200, 122, 0.12);
@@ -220,15 +211,8 @@
       transition: background .2s, border-color .2s, color .2s;
     }
 
-    .tool-btn svg {
-      width: 14px;
-      height: 14px;
-    }
-
-    .tool-btn:hover {
-      color: #e8c87a;
-      border-color: #e8c87a;
-    }
+    .tool-btn svg { width: 14px; height: 14px; }
+    .tool-btn:hover { color: #e8c87a; border-color: #e8c87a; }
 
     .tool-btn.is-active {
       background: rgba(232, 200, 122, 0.12);
@@ -236,15 +220,9 @@
       color: #e8c87a;
     }
 
-    .tool-btn.icon-only {
-      width: 36px;
-      padding: 0;
-      justify-content: center;
-    }
+    .tool-btn.icon-only { width: 36px; padding: 0; justify-content: center; }
 
-    .toolbar-wrap {
-      position: relative;
-    }
+    .toolbar-wrap { position: relative; }
 
     .luz-panel {
       position: absolute;
@@ -261,9 +239,7 @@
       backdrop-filter: blur(8px);
     }
 
-    .luz-panel.is-open {
-      display: flex;
-    }
+    .luz-panel.is-open { display: flex; }
 
     .luz-panel .titulo {
       font-family: 'JetBrains Mono', monospace;
@@ -274,11 +250,7 @@
       margin-bottom: 0.2rem;
     }
 
-    .luz-row {
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-    }
+    .luz-row { display: flex; flex-direction: column; gap: 0.3rem; }
 
     .luz-row label {
       display: flex;
@@ -288,10 +260,7 @@
       color: #8b8f9a;
     }
 
-    .luz-row input[type=range] {
-      width: 100%;
-      accent-color: #e8c87a;
-    }
+    .luz-row input[type=range] { width: 100%; accent-color: #e8c87a; }
 
     #explorador-overlay {
       position: fixed;
@@ -319,7 +288,6 @@
       right: 8.5rem;
       z-index: 200;
       display: none;
-      /* el JS lo pone en "flex" solo en modo explorador */
     }
 
     #btn-explorador-menu {
@@ -335,10 +303,7 @@
       transition: border-color .2s, color .2s;
     }
 
-    #btn-explorador-menu:hover {
-      border-color: #e8c87a;
-      color: #e8c87a;
-    }
+    #btn-explorador-menu:hover { border-color: #e8c87a; color: #e8c87a; }
 
     #explorador-menu {
       position: absolute;
@@ -355,9 +320,7 @@
       backdrop-filter: blur(8px);
     }
 
-    #explorador-menu.is-open {
-      display: flex;
-    }
+    #explorador-menu.is-open { display: flex; }
 
     #explorador-menu .titulo {
       font-family: 'JetBrains Mono', monospace;
@@ -367,9 +330,7 @@
       color: #8b8f9a;
     }
 
-    .modo-grupo-vertical {
-      flex-direction: column;
-    }
+    .modo-grupo-vertical { flex-direction: column; }
 
     .explorador-menu-ayuda {
       font-family: 'JetBrains Mono', monospace;
@@ -379,9 +340,189 @@
       margin: 0;
     }
 
-    .explorador-menu-ayuda b {
-      color: #e8c87a;
+    .explorador-menu-ayuda b { color: #e8c87a; }
+
+    /* Indicador de interacción */
+    .interaction-prompt {
+      position: fixed;
+      bottom: 120px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(10, 14, 20, 0.9);
+      border: 1px solid var(--ocre);
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
     }
+
+    .interaction-prompt.visible { opacity: 1; }
+
+    .interaction-prompt .key {
+      background: var(--ocre);
+      color: #0a0e14;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: bold;
+    }
+
+    .interaction-prompt .text {
+      color: var(--texto);
+      font-size: 0.9rem;
+    }
+
+    /* Panel de Historia */
+    .info-panel-historia {
+      position: fixed;
+      bottom: 140px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(10, 14, 20, 0.95);
+      border: 1px solid var(--ocre);
+      border-radius: 8px;
+      padding: 1.5rem 2rem;
+      max-width: 600px;
+      width: 90%;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+
+    .info-panel-historia.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .info-panel-historia .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--linea);
+      padding-bottom: 0.8rem;
+    }
+
+    .info-panel-historia .panel-header h2 {
+      font-family: 'Fraunces', serif;
+      color: var(--ocre);
+      margin: 0;
+      font-size: 1.3rem;
+    }
+
+    .info-panel-historia .btn-cerrar {
+      background: none;
+      border: none;
+      color: var(--texto-tenue);
+      font-size: 1.8rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .info-panel-historia .btn-cerrar:hover { color: var(--ocre); }
+
+    .info-panel-historia .panel-content {
+      color: var(--texto);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    /* Panel de Materia (azul) */
+    .info-panel-materia {
+      position: fixed;
+      bottom: 140px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(10, 14, 20, 0.95);
+      border: 1px solid #4fc3f7;
+      border-radius: 8px;
+      padding: 1.5rem 2rem;
+      max-width: 600px;
+      width: 90%;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+
+    .info-panel-materia.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .info-panel-materia .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--linea);
+      padding-bottom: 0.8rem;
+    }
+
+    .info-panel-materia .panel-header h2 {
+      font-family: 'Fraunces', serif;
+      color: #4fc3f7;
+      margin: 0;
+      font-size: 1.3rem;
+    }
+
+    .info-panel-materia .btn-cerrar {
+      background: none;
+      border: none;
+      color: var(--texto-tenue);
+      font-size: 1.8rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .info-panel-materia .btn-cerrar:hover { color: #4fc3f7; }
+
+    .info-panel-materia .panel-content {
+      color: var(--texto);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    /* Ícono SVG grande en el panel de materia */
+.panel-icono-materia {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4fc3f7;
+  padding: 1rem;
+  border: 1px solid rgba(79, 195, 247, 0.3);
+  border-radius: 8px;
+  background: rgba(79, 195, 247, 0.05);
+}
+
+.panel-icono-materia svg {
+  width: 100%;
+  height: 100%;
+  stroke: currentColor;
+}
   </style>
 </head>
 
@@ -401,8 +542,6 @@
     <p id="carga-pct" style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:#e8c87a;">0%</p>
   </div>
 
-  <!-- Estos 3 elementos son position:fixed y van FUERA de #pagina
-     para que no se vean afectados por la animación de slide -->
   <button id="btn-salir-visor">← Salir</button>
   <div id="explorador-menu-wrap">
     <button id="btn-explorador-menu" title="Más opciones">⋮</button>
@@ -505,7 +644,6 @@
   <div id="explorador-overlay">W A S D — mover &nbsp;|&nbsp; Q/E — subir/bajar &nbsp;|&nbsp; Mouse — mirar &nbsp;|&nbsp;
     ESC — salir</div>
 
-  <!-- #pagina solo envuelve el nav y la pantalla de intro -->
   <div id="pagina">
     <nav class="nav-hero">
       <div class="brand"><span class="brand-mark">CEA</span> C.E.A. "Catavi"</div>
@@ -530,6 +668,30 @@
         <button id="btn-recorrer-intro" class="btn btn-ghost">🎬 Recorrido</button>
       </div>
     </div>
+  </div>
+
+  <!-- Indicador de interacción -->
+  <div id="interaction-prompt" class="interaction-prompt">
+    <span class="key">E</span>
+    <span class="text">Interactuar</span>
+  </div>
+
+  <!-- Panel de Información Histórico -->
+  <div id="info-panel-historia" class="info-panel-historia">
+    <div class="panel-header">
+      <h2 id="panel-historia-titulo">Título</h2>
+      <button onclick="cerrarPanelHistoria()" class="btn-cerrar">×</button>
+    </div>
+    <div class="panel-content" id="panel-historia-contenido"></div>
+  </div>
+
+  <!-- Panel de Información de Materia -->
+  <div id="info-panel-materia" class="info-panel-materia">
+    <div class="panel-header">
+      <h2 id="panel-materia-titulo">Título</h2>
+      <button onclick="cerrarPanelMateria()" class="btn-cerrar">×</button>
+    </div>
+    <div class="panel-content" id="panel-materia-contenido"></div>
   </div>
 
   <script src="js/libs/three.js"></script>

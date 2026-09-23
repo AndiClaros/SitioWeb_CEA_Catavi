@@ -417,6 +417,14 @@ function animarFondo() {
     }
   }
 
+  // === MARCADORES DE HISTORIA ===
+if (typeof animarMarcadoresHistoria === 'function') animarMarcadoresHistoria();
+if (typeof verificarProximidadHistoria === 'function') verificarProximidadHistoria();
+
+// === MARCADORES DE MATERIAS ===
+if (typeof animarMarcadoresMaterias === 'function') animarMarcadoresMaterias();
+if (typeof verificarProximidadMaterias === 'function') verificarProximidadMaterias();
+
   if (sistemaClima) {
     var pos = sistemaClima.geometry.attributes.position.array;
     for (var i = 1; i < pos.length; i += 3) {
