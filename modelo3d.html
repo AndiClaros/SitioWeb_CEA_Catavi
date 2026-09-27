@@ -1,541 +1,306 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Modelo 3D — C.E.A. "Catavi"</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <style>
-    #fondo-3d {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    #fondo-3d canvas {
-      display: block;
-      width: 100% !important;
-      height: 100% !important;
-    }
+    #fondo-3d { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
+    #fondo-3d canvas { display: block; width: 100% !important; height: 100% !important; }
 
     #vista-intro {
-      position: fixed;
-      inset: 0;
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
+      position: fixed; inset: 0; z-index: 10;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: flex-start;
       padding: 330px clamp(2rem, 6vw, 5rem);
       background: linear-gradient(90deg, rgba(10, 14, 20, 0.82) 45%, transparent 80%);
       transition: opacity 0.4s;
     }
-
     #vista-intro .tag-pill {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #e8c87a;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 1.4rem;
+      font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: #e8c87a; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.4rem;
     }
-
     #vista-intro .dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #e8c87a;
-      display: inline-block;
-      animation: pulseDot 1.4s infinite;
+      width: 7px; height: 7px; border-radius: 50%; background: #e8c87a;
+      display: inline-block; animation: pulseDot 1.4s infinite;
     }
-
-    @keyframes pulseDot {
-      0%, 100% { opacity: 0.4; }
-      50% { opacity: 1; }
-    }
-
+    @keyframes pulseDot { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
     #vista-intro h1 {
-      font-family: 'Fraunces', serif;
-      font-weight: 600;
-      font-size: clamp(2rem, 4vw, 3.2rem);
-      line-height: 1.1;
-      color: #f0ebe0;
-      max-width: 14ch;
-      margin-bottom: 1.2rem;
+      font-family: 'Fraunces', serif; font-weight: 600;
+      font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.1;
+      color: #f0ebe0; max-width: 14ch; margin-bottom: 1.2rem;
     }
-
-    #vista-intro h1 .accent {
-      color: #e8c87a;
-      font-style: italic;
-    }
-
+    #vista-intro h1 .accent { color: #e8c87a; font-style: italic; }
     #vista-intro p {
-      font-size: 1rem;
-      line-height: 1.7;
-      color: #c7cad3;
-      max-width: 44ch;
-      margin-bottom: 2.2rem;
+      font-size: 1rem; line-height: 1.7; color: #c7cad3;
+      max-width: 44ch; margin-bottom: 2.2rem;
     }
-
-    #vista-intro .intro-btns {
-      display: flex;
-      gap: 0.8rem;
-      flex-wrap: wrap;
-    }
+    #vista-intro .intro-btns { display: flex; gap: 0.8rem; flex-wrap: wrap; }
 
     #btn-salir-visor {
-      position: fixed;
-      top: 1rem;
-      right: 1.5rem;
-      z-index: 200;
-      display: none;
-      opacity: 0;
-      background: rgba(10, 14, 20, 0.85);
-      color: #f0ebe0;
-      border: 1px solid #ffffff22;
-      border-radius: 6px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      letter-spacing: 0.06em;
-      padding: 0.6rem 1.2rem;
-      cursor: pointer;
+      position: fixed; top: 1rem; right: 1.5rem; z-index: 200;
+      display: none; opacity: 0;
+      background: rgba(10, 14, 20, 0.85); color: #f0ebe0;
+      border: 1px solid #ffffff22; border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+      letter-spacing: 0.06em; padding: 0.6rem 1.2rem; cursor: pointer;
       backdrop-filter: blur(6px);
       transition: opacity .4s, border-color .2s, color .2s;
-      align-items: center;
-      gap: 0.5rem;
+      align-items: center; gap: 0.5rem;
     }
-
-    #btn-salir-visor:hover {
-      border-color: #e8c87a;
-      color: #e8c87a;
-    }
+    #btn-salir-visor:hover { border-color: #e8c87a; color: #e8c87a; }
 
     #visor-controles {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 200;
-      display: none;
-      opacity: 0;
-      flex-direction: column;
-      transition: opacity .4s;
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+      display: none; opacity: 0; flex-direction: column; transition: opacity .4s;
     }
-
     .canvas-controls-hint {
-      display: none;
-      gap: 1.5rem;
+      display: none; gap: 1.5rem;
       padding: 0.6rem clamp(1rem, 3vw, 2rem);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.06em;
-      color: #8b8f9a;
-      background: rgba(10, 14, 20, 0.55);
+      font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+      letter-spacing: 0.06em; color: #8b8f9a; background: rgba(10, 14, 20, 0.55);
     }
-
-    .canvas-controls-hint b {
-      color: #e8c87a;
-    }
-
+    .canvas-controls-hint b { color: #e8c87a; }
     .canvas-toolbar {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
+      display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
       padding: 0.7rem clamp(1rem, 3vw, 2rem);
-      background: rgba(10, 14, 20, 0.9);
-      border-top: 1px solid #ffffff0f;
+      background: rgba(10, 14, 20, 0.9); border-top: 1px solid #ffffff0f;
       backdrop-filter: blur(10px);
     }
-
     .modo-grupo {
-      display: flex;
-      gap: 0.3rem;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid #ffffff12;
-      border-radius: 6px;
-      padding: 0.25rem;
+      display: flex; gap: 0.3rem;
+      background: rgba(255, 255, 255, 0.04); border: 1px solid #ffffff12;
+      border-radius: 6px; padding: 0.25rem;
     }
-
     .btn-modo {
-      height: 36px;
-      padding: 0 0.85rem;
-      background: transparent;
-      border: 1px solid transparent;
-      border-radius: 4px;
-      color: #8b8f9a;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
-      letter-spacing: 0.04em;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
+      height: 36px; padding: 0 0.85rem; background: transparent;
+      border: 1px solid transparent; border-radius: 4px; color: #8b8f9a;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+      letter-spacing: 0.04em; cursor: pointer;
+      display: flex; align-items: center; gap: 0.4rem;
       transition: background .2s, border-color .2s, color .2s;
     }
-
     .btn-modo:hover { color: #e8c87a; }
-
-    .btn-modo.is-active {
-      background: rgba(232, 200, 122, 0.12);
-      border-color: #e8c87a;
-      color: #e8c87a;
-    }
-
+    .btn-modo.is-active { background: rgba(232, 200, 122, 0.12); border-color: #e8c87a; color: #e8c87a; }
     .tool-btn {
-      height: 36px;
-      padding: 0 0.9rem;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid #ffffff14;
-      border-radius: 4px;
-      color: #8b8f9a;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
-      letter-spacing: 0.04em;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
+      height: 36px; padding: 0 0.9rem; background: rgba(255, 255, 255, 0.05);
+      border: 1px solid #ffffff14; border-radius: 4px; color: #8b8f9a;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+      letter-spacing: 0.04em; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 0.45rem;
       transition: background .2s, border-color .2s, color .2s;
     }
-
     .tool-btn svg { width: 14px; height: 14px; }
     .tool-btn:hover { color: #e8c87a; border-color: #e8c87a; }
-
-    .tool-btn.is-active {
-      background: rgba(232, 200, 122, 0.12);
-      border-color: #e8c87a;
-      color: #e8c87a;
-    }
-
+    .tool-btn.is-active { background: rgba(232, 200, 122, 0.12); border-color: #e8c87a; color: #e8c87a; }
     .tool-btn.icon-only { width: 36px; padding: 0; justify-content: center; }
-
     .toolbar-wrap { position: relative; }
-
     .luz-panel {
-      position: absolute;
-      bottom: calc(100% + 0.5rem);
-      left: 0;
-      min-width: 220px;
-      background: rgba(10, 14, 20, 0.95);
-      border: 1px solid #ffffff14;
-      border-radius: 6px;
-      padding: 1rem 1.1rem;
-      display: none;
-      flex-direction: column;
-      gap: 0.8rem;
-      backdrop-filter: blur(8px);
+      position: absolute; bottom: calc(100% + 0.5rem); left: 0; min-width: 220px;
+      background: rgba(10, 14, 20, 0.95); border: 1px solid #ffffff14;
+      border-radius: 6px; padding: 1rem 1.1rem;
+      display: none; flex-direction: column; gap: 0.8rem; backdrop-filter: blur(8px);
     }
-
     .luz-panel.is-open { display: flex; }
-
     .luz-panel .titulo {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #8b8f9a;
-      margin-bottom: 0.2rem;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+      letter-spacing: 0.08em; text-transform: uppercase; color: #8b8f9a; margin-bottom: 0.2rem;
     }
-
     .luz-row { display: flex; flex-direction: column; gap: 0.3rem; }
-
     .luz-row label {
-      display: flex;
-      justify-content: space-between;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      color: #8b8f9a;
+      display: flex; justify-content: space-between;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #8b8f9a;
     }
-
     .luz-row input[type=range] { width: 100%; accent-color: #e8c87a; }
 
     #explorador-overlay {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 210;
-      text-align: center;
-      pointer-events: none;
-      background: rgba(10, 14, 20, 0.85);
-      border: 1px solid rgba(232, 200, 122, 0.3);
-      padding: 1.2rem 2rem;
-      border-radius: 8px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem;
-      color: #e8c87a;
-      letter-spacing: 0.06em;
-      opacity: 0;
-      transition: opacity 0.4s;
+      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      z-index: 210; text-align: center; pointer-events: none;
+      background: rgba(10, 14, 20, 0.85); border: 1px solid rgba(232, 200, 122, 0.3);
+      padding: 1.2rem 2rem; border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;
+      color: #e8c87a; letter-spacing: 0.06em;
+      opacity: 0; transition: opacity 0.4s;
     }
-
-    #explorador-menu-wrap {
-      position: fixed;
-      top: 1rem;
-      right: 8.5rem;
-      z-index: 200;
-      display: none;
-    }
-
+    #explorador-menu-wrap { position: fixed; top: 1rem; right: 8.5rem; z-index: 200; display: none; }
     #btn-explorador-menu {
-      background: rgba(10, 14, 20, 0.85);
-      color: #f0ebe0;
-      border: 1px solid #ffffff22;
-      border-radius: 6px;
-      width: 36px;
-      height: 36px;
-      font-size: 1.1rem;
-      cursor: pointer;
-      backdrop-filter: blur(6px);
-      transition: border-color .2s, color .2s;
+      background: rgba(10, 14, 20, 0.85); color: #f0ebe0;
+      border: 1px solid #ffffff22; border-radius: 6px;
+      width: 36px; height: 36px; font-size: 1.1rem; cursor: pointer;
+      backdrop-filter: blur(6px); transition: border-color .2s, color .2s;
     }
-
     #btn-explorador-menu:hover { border-color: #e8c87a; color: #e8c87a; }
-
     #explorador-menu {
-      position: absolute;
-      top: calc(100% + 0.5rem);
-      right: 0;
-      min-width: 220px;
-      background: rgba(10, 14, 20, 0.95);
-      border: 1px solid #ffffff14;
-      border-radius: 6px;
-      padding: 1rem 1.1rem;
-      display: none;
-      flex-direction: column;
-      gap: 0.7rem;
-      backdrop-filter: blur(8px);
+      position: absolute; top: calc(100% + 0.5rem); right: 0; min-width: 220px;
+      background: rgba(10, 14, 20, 0.95); border: 1px solid #ffffff14;
+      border-radius: 6px; padding: 1rem 1.1rem;
+      display: none; flex-direction: column; gap: 0.7rem; backdrop-filter: blur(8px);
     }
-
     #explorador-menu.is-open { display: flex; }
-
     #explorador-menu .titulo {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #8b8f9a;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+      letter-spacing: 0.08em; text-transform: uppercase; color: #8b8f9a;
     }
-
     .modo-grupo-vertical { flex-direction: column; }
-
     .explorador-menu-ayuda {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
-      line-height: 1.8;
-      color: #c7cad3;
-      margin: 0;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+      line-height: 1.8; color: #c7cad3; margin: 0;
     }
-
     .explorador-menu-ayuda b { color: #e8c87a; }
 
-    /* Indicador de interacción */
+    /* === INDICADOR DE INTERACCIÓN === */
     .interaction-prompt {
-      position: fixed;
-      bottom: 120px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      background: rgba(10, 14, 20, 0.9);
-      border: 1px solid var(--ocre);
-      padding: 0.6rem 1.2rem;
-      border-radius: 6px;
-      z-index: 999;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s;
+      position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 0.6rem;
+      background: rgba(10, 14, 20, 0.9); border: 1px solid var(--ocre);
+      padding: 0.6rem 1.2rem; border-radius: 6px; z-index: 999;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
     }
-
     .interaction-prompt.visible { opacity: 1; }
-
     .interaction-prompt .key {
-      background: var(--ocre);
-      color: #0a0e14;
-      width: 28px;
-      height: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 4px;
-      font-family: 'JetBrains Mono', monospace;
-      font-weight: bold;
+      background: var(--ocre); color: #0a0e14; width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-weight: bold;
     }
+    .interaction-prompt .text { color: var(--texto); font-size: 0.9rem; }
 
-    .interaction-prompt .text {
-      color: var(--texto);
-      font-size: 0.9rem;
-    }
+    /* === PANEL HISTORIA (sin scroll, título centrado) === */
+.info-panel-historia {
+  position: fixed;
+  bottom: 140px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(10, 14, 20, 0.95);
+  border: 1px solid var(--ocre);
+  border-radius: 8px;
+  padding: 1.5rem 2rem;
+  max-width: 600px;
+  width: 90%;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+.info-panel-historia.active { opacity: 1; pointer-events: auto; }
+.info-panel-historia .panel-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--linea);
+  padding-bottom: 0.8rem;
+  position: relative;
+}
+.info-panel-historia .panel-header h2 {
+  font-family: 'Fraunces', serif;
+  color: var(--ocre);
+  margin: 0;
+  font-size: 1.3rem;
+  text-align: center;
+  flex: 1;
+}
+.info-panel-historia .btn-cerrar {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--texto-tenue);
+  font-size: 1.8rem;
+  cursor: pointer;
+  line-height: 1;
+}
+.info-panel-historia .btn-cerrar:hover { color: var(--ocre); }
+.info-panel-historia .panel-content { color: var(--texto); line-height: 1.6; font-size: 0.95rem; }
+.info-panel-historia .panel-content img {
+  width: 100%;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  border: 1px solid var(--linea);
+}
 
-    /* Panel de Historia */
-    .info-panel-historia {
-      position: fixed;
-      bottom: 140px;
-      left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: rgba(10, 14, 20, 0.95);
-      border: 1px solid var(--ocre);
-      border-radius: 8px;
-      padding: 1.5rem 2rem;
-      max-width: 600px;
-      width: 90%;
-      z-index: 1000;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s, transform 0.3s;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-      max-height: 70vh;
-      overflow-y: auto;
-    }
+/* === PANEL MATERIA (sin scroll, título centrado) === */
+.info-panel-materia {
+  position: fixed;
+  bottom: 140px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(10, 14, 20, 0.95);
+  border: 1px solid #4fc3f7;
+  border-radius: 8px;
+  padding: 1.5rem 2rem;
+  max-width: 600px;
+  width: 90%;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+.info-panel-materia.active { opacity: 1; pointer-events: auto; }
+.info-panel-materia .panel-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--linea);
+  padding-bottom: 0.8rem;
+  position: relative;
+}
+.info-panel-materia .panel-header h2 {
+  font-family: 'Fraunces', serif;
+  color: #4fc3f7;
+  margin: 0;
+  font-size: 1.3rem;
+  text-align: center;
+  flex: 1;
+}
+.info-panel-materia .btn-cerrar {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--texto-tenue);
+  font-size: 1.8rem;
+  cursor: pointer;
+  line-height: 1;
+}
+.info-panel-materia .btn-cerrar:hover { color: #4fc3f7; }
+.info-panel-materia .panel-content { color: var(--texto); line-height: 1.6; font-size: 0.95rem; }
 
-    .info-panel-historia.active {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    .info-panel-historia .panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-      border-bottom: 1px solid var(--linea);
-      padding-bottom: 0.8rem;
-    }
-
-    .info-panel-historia .panel-header h2 {
-      font-family: 'Fraunces', serif;
-      color: var(--ocre);
-      margin: 0;
-      font-size: 1.3rem;
-    }
-
-    .info-panel-historia .btn-cerrar {
-      background: none;
-      border: none;
-      color: var(--texto-tenue);
-      font-size: 1.8rem;
-      cursor: pointer;
-      line-height: 1;
-    }
-
-    .info-panel-historia .btn-cerrar:hover { color: var(--ocre); }
-
-    .info-panel-historia .panel-content {
-      color: var(--texto);
-      line-height: 1.6;
-      font-size: 0.95rem;
-    }
-
-    /* Panel de Materia (azul) */
-    .info-panel-materia {
-      position: fixed;
-      bottom: 140px;
-      left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: rgba(10, 14, 20, 0.95);
-      border: 1px solid #4fc3f7;
-      border-radius: 8px;
-      padding: 1.5rem 2rem;
-      max-width: 600px;
-      width: 90%;
-      z-index: 1000;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s, transform 0.3s;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-      max-height: 70vh;
-      overflow-y: auto;
-    }
-
-    .info-panel-materia.active {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    .info-panel-materia .panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-      border-bottom: 1px solid var(--linea);
-      padding-bottom: 0.8rem;
-    }
-
-    .info-panel-materia .panel-header h2 {
-      font-family: 'Fraunces', serif;
-      color: #4fc3f7;
-      margin: 0;
-      font-size: 1.3rem;
-    }
-
-    .info-panel-materia .btn-cerrar {
-      background: none;
-      border: none;
-      color: var(--texto-tenue);
-      font-size: 1.8rem;
-      cursor: pointer;
-      line-height: 1;
-    }
-
-    .info-panel-materia .btn-cerrar:hover { color: #4fc3f7; }
-
-    .info-panel-materia .panel-content {
-      color: var(--texto);
-      line-height: 1.6;
-      font-size: 0.95rem;
-    }
-
-    /* Ícono SVG grande en el panel de materia */
+/* Ícono SVG de materia */
 .panel-icono-materia {
-  width: 80px;
-  height: 80px;
+  width: 72px;
+  height: 72px;
   margin: 0 auto 1.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #4fc3f7;
-  padding: 1rem;
+  padding: 0.8rem;
   border: 1px solid rgba(79, 195, 247, 0.3);
   border-radius: 8px;
   background: rgba(79, 195, 247, 0.05);
 }
-
-.panel-icono-materia svg {
-  width: 100%;
-  height: 100%;
-  stroke: currentColor;
-}
+.panel-icono-materia svg { width: 100%; height: 100%; stroke: currentColor; }
   </style>
 </head>
-
 <body>
-
   <div id="fondo-3d"></div>
 
-  <div id="pantalla-carga"
-    style="position:fixed;inset:0;z-index:9000;background:#0a0e14;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2rem;">
-    <p style="font-family:'Fraunces',serif;font-size:1.6rem;color:#f0ebe0;letter-spacing:0.02em;">C.E.A. <span
-        style="color:#e8c87a;">"Catavi"</span></p>
-    <p style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#8b8f9a;letter-spacing:0.08em;">CARGANDO
-      MODELO 3D</p>
+  <div id="pantalla-carga" style="position:fixed;inset:0;z-index:9000;background:#0a0e14;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2rem;">
+    <p style="font-family:'Fraunces',serif;font-size:1.6rem;color:#f0ebe0;letter-spacing:0.02em;">C.E.A. <span style="color:#e8c87a;">"Catavi"</span></p>
+    <p style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#8b8f9a;letter-spacing:0.08em;">CARGANDO MODELO 3D</p>
     <div style="width:220px;height:3px;background:#ffffff14;border-radius:3px;overflow:hidden;">
       <div id="carga-relleno" style="height:100%;width:0%;background:#e8c87a;transition:width 0.3s;"></div>
     </div>
@@ -549,8 +314,8 @@
       <span class="titulo">Ambiente</span>
       <div class="modo-grupo modo-grupo-vertical">
         <button class="btn-modo is-active" data-modo="dia">☀️ Día</button>
-        <button class="btn-modo" data-modo="atardecer">🌇 Tarde</button>
-        <button class="btn-modo" data-modo="noche">🌙 Noche</button>
+        <button class="btn-modo" data-modo="atardecer"> Tarde</button>
+        <button class="btn-modo" data-modo="noche"> Noche</button>
       </div>
       <span class="titulo">Controles</span>
       <p class="explorador-menu-ayuda">
@@ -570,79 +335,46 @@
     <div class="canvas-toolbar">
       <div class="modo-grupo">
         <button class="btn-modo is-active" id="btn-modo-dia" data-modo="dia">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="5" />
-            <path
-              d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5" /><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" /></svg>
           Día
         </button>
         <button class="btn-modo" id="btn-modo-atardecer" data-modo="atardecer">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 8a4 4 0 0 1 4 4H8a4 4 0 0 1 4-4z" />
-            <path d="M12 2v2M4.22 6.22l1.42 1.42M2 14h2M20 14h2M18.36 6.22l-1.42 1.42" />
-            <path d="M3 18h18" />
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8a4 4 0 0 1 4 4H8a4 4 0 0 1 4-4z" /><path d="M12 2v2M4.22 6.22l1.42 1.42M2 14h2M20 14h2M18.36 6.22l-1.42 1.42" /><path d="M3 18h18" /></svg>
           Tarde
         </button>
         <button class="btn-modo" id="btn-modo-noche" data-modo="noche">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
           Noche
         </button>
       </div>
       <div class="toolbar-wrap">
         <button class="tool-btn icon-only" id="btn-luces" title="Iluminación">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.5 1 1.2 1 2v.5h6v-.5c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z" />
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.5 1 1.2 1 2v.5h6v-.5c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z" /></svg>
         </button>
         <div class="luz-panel" id="luz-panel">
           <span class="titulo">Control de luces</span>
-          <div class="luz-row">
-            <label><span>Luz ambiental</span><span id="val-ambiental">70%</span></label>
-            <input type="range" id="slider-ambiental" min="0" max="150" value="70">
-          </div>
-          <div class="luz-row">
-            <label><span>Luz solar</span><span id="val-direccional">120%</span></label>
-            <input type="range" id="slider-direccional" min="0" max="200" value="120">
-          </div>
-          <div class="luz-row">
-            <label><span>Luz cálida</span><span id="val-puntual">20%</span></label>
-            <input type="range" id="slider-puntual" min="0" max="200" value="20">
-          </div>
+          <div class="luz-row"><label><span>Luz ambiental</span><span id="val-ambiental">70%</span></label><input type="range" id="slider-ambiental" min="0" max="150" value="70"></div>
+          <div class="luz-row"><label><span>Luz solar</span><span id="val-direccional">120%</span></label><input type="range" id="slider-direccional" min="0" max="200" value="120"></div>
+          <div class="luz-row"><label><span>Luz cálida</span><span id="val-puntual">20%</span></label><input type="range" id="slider-puntual" min="0" max="200" value="20"></div>
         </div>
       </div>
       <button class="tool-btn" id="btn-tour">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 12a9 9 0 1 0 9-9" />
-          <path d="M3 3v6h6" />
-        </svg>
-        🎬 Recorrido
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9" /><path d="M3 3v6h6" /></svg>
+         Recorrido
       </button>
       <button class="tool-btn" id="btn-explorador">🚶 Explorar</button>
       <button class="tool-btn icon-only" id="btn-zoom-out" title="Alejar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="7" />
-          <path d="M21 21l-4.35-4.35M8 11h6" />
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><path d="M21 21l-4.35-4.35M8 11h6" /></svg>
       </button>
       <button class="tool-btn icon-only" id="btn-zoom-in" title="Acercar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="7" />
-          <path d="M21 21l-4.35-4.35M11 8v6M8 11h6" />
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><path d="M21 21l-4.35-4.35M11 8v6M8 11h6" /></svg>
       </button>
       <button class="tool-btn icon-only" id="btn-fullscreen" title="Pantalla completa">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M3 16v3a2 2 0 0 0 2 2h3" />
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M3 16v3a2 2 0 0 0 2 2h3" /></svg>
       </button>
     </div>
   </div>
-  <div id="explorador-overlay">W A S D — mover &nbsp;|&nbsp; Q/E — subir/bajar &nbsp;|&nbsp; Mouse — mirar &nbsp;|&nbsp;
-    ESC — salir</div>
+  <div id="explorador-overlay">W A S D — mover &nbsp;|&nbsp; Q/E — subir/bajar &nbsp;|&nbsp; Mouse — mirar &nbsp;|&nbsp; ESC — salir</div>
 
   <div id="pagina">
     <nav class="nav-hero">
@@ -661,8 +393,7 @@
     <div id="vista-intro">
       <div class="tag-pill"><span class="dot"></span> Modelo 3D en vivo</div>
       <h1>El edificio, <span class="accent">navegable</span> desde cualquier ángulo</h1>
-      <p>Modelo 3D del C.E.A. "Catavi" modelado en Blender a partir de fotografías propias del edificio, y exportado a
-        este sitio con Three.js.</p>
+      <p>Modelo 3D del C.E.A. "Catavi" modelado en Blender a partir de fotografías propias del edificio, y exportado a este sitio con Three.js.</p>
       <div class="intro-btns">
         <button id="btn-entrar" class="btn btn-primary">Entrar al modelo 3D →</button>
         <button id="btn-recorrer-intro" class="btn btn-ghost">🎬 Recorrido</button>
@@ -670,13 +401,12 @@
     </div>
   </div>
 
-  <!-- Indicador de interacción -->
+  <!-- INDICADOR Y PANELES -->
   <div id="interaction-prompt" class="interaction-prompt">
     <span class="key">E</span>
     <span class="text">Interactuar</span>
   </div>
 
-  <!-- Panel de Información Histórico -->
   <div id="info-panel-historia" class="info-panel-historia">
     <div class="panel-header">
       <h2 id="panel-historia-titulo">Título</h2>
@@ -685,7 +415,6 @@
     <div class="panel-content" id="panel-historia-contenido"></div>
   </div>
 
-  <!-- Panel de Información de Materia -->
   <div id="info-panel-materia" class="info-panel-materia">
     <div class="panel-header">
       <h2 id="panel-materia-titulo">Título</h2>
@@ -712,5 +441,4 @@
     });
   </script>
 </body>
-
 </html>

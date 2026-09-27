@@ -21,10 +21,10 @@ var puntosHistoria = [
     titulo: "De la Mina a las Aulas",
     contenido: `
       <img src="images/hero-cea.jpg" alt="Fachada principal" style="width:100%; border-radius:4px; margin-bottom:1rem; border:1px solid var(--linea);">
-      <p>El recorrido del C.E.A. "Catavi", desde la lucha obrera por la educación en el complejo minero Catavi–Siglo XX hasta convertirse en el centro de referencia técnica y humanística que hoy domina la ladera de Catavi.</p>
+      <p style="margin-bottom: 0.8rem;">El recorrido del C.E.A. "Catavi", desde la lucha obrera por la educación en el complejo minero Catavi–Siglo XX hasta convertirse en el centro de referencia técnica y humanística que hoy domina la ladera de Catavi.</p>
       <p>Fundado el 17 de agosto de 1972, nace como respuesta al retorno de los mineros a los campamentos, con el objetivo de ofrecer educación de adultos a la población minera y sus familias.</p>
     `,
-    radio: 6
+    radio: 2.5
   },
   {
     id: 'linea_tiempo',
@@ -32,54 +32,34 @@ var puntosHistoria = [
     titulo: "Línea de Tiempo Histórica",
     contenido: `
       <ul style="list-style: none; padding: 0; margin: 0;">
-        <li style="margin-bottom: 1.1rem; border-left: 2px solid var(--ocre); padding-left: 1rem;">
-          <strong style="color: var(--ocre); font-family: 'JetBrains Mono', monospace;">1944</strong>
-          <h4 style="margin: 0.3rem 0; font-family: 'Fraunces', serif;">La lucha obrera exige educación</h4>
-          <p style="margin: 0; font-size: 0.88rem; line-height: 1.5; color: #c7cad3;">Se funda la Federación Sindical de Trabajadores Mineros de Bolivia (FSTMB), que desde sus inicios reclama educación gratuita y obligatoria para los hijos de los mineros.</p>
+        <li style="margin-bottom: 0.9rem; border-left: 2px solid var(--ocre); padding-left: 1rem;">
+          <strong style="color: var(--ocre); font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;">1944</strong>
+          <h4 style="margin: 0.2rem 0; font-family: 'Fraunces', serif; font-size: 1rem;">La lucha obrera exige educación</h4>
+          <p style="margin: 0; font-size: 0.85rem; line-height: 1.4; color: #c7cad3;">Se funda la FSTMB exigiendo educación gratuita para los hijos de los mineros.</p>
         </li>
-        <li style="margin-bottom: 1.1rem; border-left: 2px solid var(--ocre); padding-left: 1rem;">
-          <strong style="color: var(--ocre); font-family: 'JetBrains Mono', monospace;">1952</strong>
-          <h4 style="margin: 0.3rem 0; font-family: 'Fraunces', serif;">Revolución Nacional y nacionalización de las minas</h4>
-          <p style="margin: 0; font-size: 0.88rem; line-height: 1.5; color: #c7cad3;">Tras la Revolución del 9 de abril, las minas de Catavi-Siglo XX pasan a manos de COMIBOL. Se abre una etapa de mayor inversión social en los campamentos mineros.</p>
+        <li style="margin-bottom: 0.9rem; border-left: 2px solid var(--ocre); padding-left: 1rem;">
+          <strong style="color: var(--ocre); font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;">1972</strong>
+          <h4 style="margin: 0.2rem 0; font-family: 'Fraunces', serif; font-size: 1rem;">Fundación oficial del centro</h4>
+          <p style="margin: 0; font-size: 0.85rem; line-height: 1.4; color: #c7cad3;">El 17 de agosto nace el centro educativo para la población minera.</p>
         </li>
-        <li style="margin-bottom: 1.1rem; border-left: 2px solid var(--ocre); padding-left: 1rem;">
-          <strong style="color: var(--ocre); font-family: 'JetBrains Mono', monospace;">1972</strong>
-          <h4 style="margin: 0.3rem 0; font-family: 'Fraunces', serif;">Fundación oficial del centro</h4>
-          <p style="margin: 0; font-size: 0.88rem; line-height: 1.5; color: #c7cad3;">El 17 de agosto de 1972 nace formalmente el centro educativo, como respuesta al retorno de los mineros a los campamentos y la necesidad de alfabetización de adultos.</p>
+        <li style="margin-bottom: 0.9rem; border-left: 2px solid var(--ocre); padding-left: 1rem;">
+          <strong style="color: var(--ocre); font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;">2007 – 2011</strong>
+          <h4 style="margin: 0.2rem 0; font-family: 'Fraunces', serif; font-size: 1rem;">Construcción del edificio actual</h4>
+          <p style="margin: 0; font-size: 0.85rem; line-height: 1.4; color: #c7cad3;">Se erige el moderno edificio de 1.133 m² con tres niveles y talleres equipados.</p>
         </li>
-        <li style="margin-bottom: 1.1rem; border-left: 2px solid var(--ocre); padding-left: 1rem;">
-          <strong style="color: var(--ocre); font-family: 'JetBrains Mono', monospace;">1980 – 1990</strong>
-          <h4 style="margin: 0.3rem 0; font-family: 'Fraunces', serif;">Consolidación de la educación de adultos</h4>
-          <p style="margin: 0; font-size: 0.88rem; line-height: 1.5; color: #c7cad3;">Se consolidan los programas de Educación de Personas Jóvenes y Adultas (EPJA), permitiendo que trabajadores y madres de familia concluyan sus estudios primarios y secundarios.</p>
+        <li style="margin-bottom: 0.9rem; border-left: 2px solid var(--ocre); padding-left: 1rem;">
+          <strong style="color: var(--ocre); font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;">2012</strong>
+          <h4 style="margin: 0.2rem 0; font-family: 'Fraunces', serif; font-size: 1rem;">Reconocimiento como C.E.A.</h4>
+          <p style="margin: 0; font-size: 0.85rem; line-height: 1.4; color: #c7cad3;">Se reconoce oficialmente como Centro de Educación Alternativa "Catavi".</p>
         </li>
-        <li style="margin-bottom: 1.1rem; border-left: 2px solid var(--ocre); padding-left: 1rem;">
-          <strong style="color: var(--ocre); font-family: 'JetBrains Mono', monospace;">1992</strong>
-          <h4 style="margin: 0.3rem 0; font-family: 'Fraunces', serif;">Inicio de la formación técnica</h4>
-          <p style="margin: 0; font-size: 0.88rem; line-height: 1.5; color: #c7cad3;">Se incorporan los primeros talleres técnicos (Mecánica, Electricidad, Corte y Confección), ampliando la oferta más allá de la educación humanística.</p>
-        </li>
-        <li style="margin-bottom: 1.1rem; border-left: 2px solid var(--ocre); padding-left: 1rem;">
-          <strong style="color: var(--ocre); font-family: 'JetBrains Mono', monospace;">2007 – 2011</strong>
-          <h4 style="margin: 0.3rem 0; font-family: 'Fraunces', serif;">Construcción del edificio actual</h4>
-          <p style="margin: 0; font-size: 0.88rem; line-height: 1.5; color: #c7cad3;">Se erige el moderno edificio de 1.133 m² que hoy domina la ladera de Catavi, con tres niveles, claraboya central y talleres equipados.</p>
-        </li>
-        <li style="margin-bottom: 1.1rem; border-left: 2px solid var(--ocre); padding-left: 1rem;">
-          <strong style="color: var(--ocre); font-family: 'JetBrains Mono', monospace;">2012</strong>
-          <h4 style="margin: 0.3rem 0; font-family: 'Fraunces', serif;">Reconocimiento como C.E.A.</h4>
-          <p style="margin: 0; font-size: 0.88rem; line-height: 1.5; color: #c7cad3;">El centro es reconocido oficialmente como Centro de Educación Alternativa "Catavi", ampliando sus 8 especialidades técnicas.</p>
-        </li>
-        <li style="margin-bottom: 1.1rem; border-left: 2px solid var(--ocre); padding-left: 1rem;">
-          <strong style="color: var(--ocre); font-family: 'JetBrains Mono', monospace;">2020</strong>
-          <h4 style="margin: 0.3rem 0; font-family: 'Fraunces', serif;">Adaptación a la virtualidad</h4>
-          <p style="margin: 0; font-size: 0.88rem; line-height: 1.5; color: #c7cad3;">Durante la pandemia, el centro implementa plataformas digitales para continuar con la enseñanza de forma semipresencial.</p>
-        </li>
-        <li style="margin-bottom: 1.1rem; border-left: 2px solid var(--ocre); padding-left: 1rem;">
-          <strong style="color: var(--ocre); font-family: 'JetBrains Mono', monospace;">2022</strong>
-          <h4 style="margin: 0.3rem 0; font-family: 'Fraunces', serif;">Bodas de Oro</h4>
-          <p style="margin: 0; font-size: 0.88rem; line-height: 1.5; color: #c7cad3;">El C.E.A. Catavi celebra sus 50 años de historia, siendo reconocido oficialmente por el Senado de Bolivia como institución de referencia técnica y humanística.</p>
+        <li style="margin-bottom: 0; border-left: 2px solid var(--ocre); padding-left: 1rem;">
+          <strong style="color: var(--ocre); font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;">2022</strong>
+          <h4 style="margin: 0.2rem 0; font-family: 'Fraunces', serif; font-size: 1rem;">Bodas de Oro</h4>
+          <p style="margin: 0; font-size: 0.85rem; line-height: 1.4; color: #c7cad3;">El Senado de Bolivia reconoce al C.E.A. por sus 50 años de servicio.</p>
         </li>
       </ul>
     `,
-    radio: 6
+    radio: 2.5
   }
 ];
 
@@ -89,7 +69,7 @@ var panelHistoriaAbierto = false;
 
 function crearMarcadoresHistoria() {
   puntosHistoria.forEach(function(punto) {
-    var geometria = new THREE.SphereGeometry(0.5, 16, 16);
+    var geometria = new THREE.SphereGeometry(0.2, 16, 16);
     var material = new THREE.MeshBasicMaterial({ 
       color: 0xe8c87a,
       transparent: true,
@@ -103,7 +83,7 @@ function crearMarcadoresHistoria() {
     scene3d.add(esfera);
     marcadoresHistoriaMesh.push(esfera);
 
-    var nucleoGeo = new THREE.SphereGeometry(0.15, 8, 8);
+    var nucleoGeo = new THREE.SphereGeometry(0.06, 8, 8);
     var nucleoMat = new THREE.MeshBasicMaterial({ color: 0xffffff, depthTest: false });
     var nucleo = new THREE.Mesh(nucleoGeo, nucleoMat);
     nucleo.position.set(punto.posicion.x, punto.posicion.y, punto.posicion.z);
@@ -124,18 +104,17 @@ function animarMarcadoresHistoria() {
 }
 
 function verificarProximidadHistoria() {
-  if (!camera3d || panelHistoriaAbierto || panelMateriaAbierto) return;
-  
+  if (!camera3d) return;
   var camaraPos = camera3d.position;
   var cercano = null;
-  
   puntosHistoria.forEach(function(punto) {
     var distancia = camaraPos.distanceTo(new THREE.Vector3(punto.posicion.x, punto.posicion.y, punto.posicion.z));
-    if (distancia < punto.radio) {
-      cercano = punto;
-    }
+    if (distancia < punto.radio) cercano = punto;
   });
-  
+  if (panelHistoriaAbierto && !cercano && marcadorActivo) {
+    var distanciaActual = camaraPos.distanceTo(new THREE.Vector3(marcadorActivo.posicion.x, marcadorActivo.posicion.y, marcadorActivo.posicion.z));
+    if (distanciaActual > marcadorActivo.radio * 1.5) cerrarPanelHistoria();
+  }
   marcadorActivo = cercano;
 }
 
@@ -160,15 +139,32 @@ function cerrarPanelHistoria() {
 // ==========================================
 var puntosMaterias = [
   {
-    id: 'gastronomia',
-    posicion: { x: -13.21, y: 0.01, z: 4.00 },
-    titulo: "Gastronomía y Alimentación",
-    icono: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-      <path d="M6 13.5C6 10 8.5 7 12 7s6 3 6 6.5M4 13.5h16M5 17h14M8 21h8" />
-    </svg>`,
+    id: 'sastreria',
+    posicion: { x: -24.07, y: 2.46, z: 11.70 },
+    titulo: "Sastrería",
+    icono: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" /><path d="M14 2v5h5M9 13h6M9 17h6" /></svg>`,
     contenido: `
       <h4 style="color: #4fc3f7; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5rem;">Sobre la carrera</h4>
-      <p style="margin-bottom: 1rem;">Formación integral en el arte culinario, desde los fundamentos de la nutrición hasta técnicas avanzadas de servicio. Los estudiantes aprenden a preparar platos de la gastronomía boliviana e internacional, con énfasis en higiene alimentaria y manipulación segura de alimentos.</p>
+      <p style="margin-bottom: 1rem;">Formación en diseño, confección y arreglo de prendas de vestir. Los estudiantes aprenden técnicas de patronaje, corte y costura para crear ropa a medida.</p>
+      <h4 style="color: #4fc3f7; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5rem;">Contenidos principales</h4>
+      <ul style="list-style: none; padding: 0; margin-bottom: 1rem;">
+        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Diseño y patronaje de prendas</li>
+        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Técnicas de corte y confección</li>
+        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Arreglos y modificaciones de ropa</li>
+        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Confección de trajes y ropa formal</li>
+      </ul>
+      <p style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--texto-tenue);"><strong style="color: #4fc3f7;">Duración:</strong> 2 años · Técnico Medio · Validez nacional (Ley 070)</p>
+    `,
+    radio: 2.5
+  },
+  {
+    id: 'gastronomia',
+    posicion: { x: 11.37, y: 2.46, z: -3.21 },
+    titulo: "Gastronomía",
+    icono: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 13.5C6 10 8.5 7 12 7s6 3 6 6.5M4 13.5h16M5 17h14M8 21h8" /></svg>`,
+    contenido: `
+      <h4 style="color: #4fc3f7; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5rem;">Sobre la carrera</h4>
+      <p style="margin-bottom: 1rem;">Formación integral en el arte culinario, desde los fundamentos de la nutrición hasta técnicas avanzadas de servicio. Los estudiantes aprenden a preparar platos de la gastronomía boliviana e internacional.</p>
       <h4 style="color: #4fc3f7; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5rem;">Contenidos principales</h4>
       <ul style="list-style: none; padding: 0; margin-bottom: 1rem;">
         <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Nutrición y dietética básica</li>
@@ -178,19 +174,35 @@ var puntosMaterias = [
       </ul>
       <p style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--texto-tenue);"><strong style="color: #4fc3f7;">Duración:</strong> 2 años · Técnico Medio · Validez nacional (Ley 070)</p>
     `,
-    radio: 6
+    radio: 2.5
+  },
+  {
+    id: 'mecanica',
+    posicion: { x: -2.91, y: 2.46, z: 11.18 },
+    titulo: "Mecánica Automotriz",
+    icono: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9" /></svg>`,
+    contenido: `
+      <h4 style="color: #4fc3f7; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5rem;">Sobre la carrera</h4>
+      <p style="margin-bottom: 1rem;">Especialidad técnica en mantenimiento y reparación de vehículos. Los estudiantes dominan motores gasolina y diésel, sistemas de transmisión, frenos y electricidad automotriz.</p>
+      <h4 style="color: #4fc3f7; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5rem;">Contenidos principales</h4>
+      <ul style="list-style: none; padding: 0; margin-bottom: 1rem;">
+        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Motores de combustión interna</li>
+        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Sistemas de transmisión y frenos</li>
+        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Electricidad y electrónica automotriz</li>
+        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Diagnóstico y mantenimiento preventivo</li>
+      </ul>
+      <p style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--texto-tenue);"><strong style="color: #4fc3f7;">Duración:</strong> 2 años · Técnico Medio · Validez nacional (Ley 070)</p>
+    `,
+    radio: 2.5
   },
   {
     id: 'electronica',
-    posicion: { x: -6.94, y: 6.09, z: 4.26 },
+    posicion: { x: 10.44, y: 7.89, z: 0.10 },
     titulo: "Electrónica",
-    icono: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-      <rect x="4" y="4" width="16" height="16" rx="2" />
-      <path d="M9 9h1v1H9zM14 9h1v1h-1zM9 14h1v1H9zM14 14h1v1h-1z" />
-    </svg>`,
+    icono: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2" /><path d="M9 9h1v1H9zM14 9h1v1h-1zM9 14h1v1H9zM14 14h1v1h-1z" /></svg>`,
     contenido: `
       <h4 style="color: #4fc3f7; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5rem;">Sobre la carrera</h4>
-      <p style="margin-bottom: 1rem;">Especialidad técnica orientada al diseño, montaje y reparación de circuitos electrónicos. Los estudiantes dominan tanto la electrónica analógica tradicional como los fundamentos de la electrónica digital moderna, con prácticas en equipos reales de audio, video y electrodomésticos.</p>
+      <p style="margin-bottom: 1rem;">Especialidad técnica orientada al diseño, montaje y reparación de circuitos electrónicos. Los estudiantes dominan tanto la electrónica analógica tradicional como los fundamentos de la electrónica digital moderna.</p>
       <h4 style="color: #4fc3f7; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5rem;">Contenidos principales</h4>
       <ul style="list-style: none; padding: 0; margin-bottom: 1rem;">
         <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Circuitos analógicos y digitales</li>
@@ -200,18 +212,16 @@ var puntosMaterias = [
       </ul>
       <p style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--texto-tenue);"><strong style="color: #4fc3f7;">Duración:</strong> 2 años · Técnico Medio · Validez nacional (Ley 070)</p>
     `,
-    radio: 6
+    radio: 2.5
   },
   {
     id: 'electricidad',
-    posicion: { x: 20.96, y: 6.09, z: -2.06 },
+    posicion: { x: 21.54, y: 7.89, z: -18.44 },
     titulo: "Electricidad Industrial",
-    icono: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-      <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />
-    </svg>`,
+    icono: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" /></svg>`,
     contenido: `
       <h4 style="color: #4fc3f7; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5rem;">Sobre la carrera</h4>
-      <p style="margin-bottom: 1rem;">Una de las especialidades con mayor demanda laboral en la región. Forma técnicos capaces de instalar, mantener y reparar sistemas eléctricos tanto en viviendas como en industrias, con conocimientos actualizados en energías renovables y eficiencia energética.</p>
+      <p style="margin-bottom: 1rem;">Una de las especialidades con mayor demanda laboral en la región. Forma técnicos capaces de instalar, mantener y reparar sistemas eléctricos tanto en viviendas como en industrias.</p>
       <h4 style="color: #4fc3f7; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5rem;">Contenidos principales</h4>
       <ul style="list-style: none; padding: 0; margin-bottom: 1rem;">
         <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Instalaciones eléctricas domiciliarias</li>
@@ -221,29 +231,83 @@ var puntosMaterias = [
       </ul>
       <p style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--texto-tenue);"><strong style="color: #4fc3f7;">Duración:</strong> 2 años · Técnico Medio · Validez nacional (Ley 070)</p>
     `,
-    radio: 6
+    radio: 2.5
   },
   {
-    id: 'confeccion',
-    posicion: { x: -16.43, y: 12.00, z: 13.74 },
-    titulo: "Corte y Confección",
-    icono: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-      <path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
-      <path d="M14 2v5h5M9 13h6M9 17h6" />
-    </svg>`,
+    id: 'construccion',
+    posicion: { x: -28.89, y: 7.89, z: 4.70 },
+    titulo: "Construcción Civil",
+    icono: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21h18M5 21V7l8-4 8 4v14M9 21v-6h6v6" /></svg>`,
     contenido: `
       <h4 style="color: #4fc3f7; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5rem;">Sobre la carrera</h4>
-      <p style="margin-bottom: 1rem;">Especialidad que combina creatividad y técnica. Los estudiantes aprenden desde el trazado de patrones básicos hasta la confección industrial de prendas, con énfasis en el escalado de tallas y la producción de uniformes escolares y laborales para el mercado local.</p>
+      <p style="margin-bottom: 1rem;">Formación en técnicas de construcción, desde los fundamentos de la albañilería hasta la lectura de planos y presupuestos. Los estudiantes aprenden a ejecutar obras civiles completas.</p>
       <h4 style="color: #4fc3f7; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5rem;">Contenidos principales</h4>
       <ul style="list-style: none; padding: 0; margin-bottom: 1rem;">
-        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Patronaje y diseño de moldes</li>
-        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Escalado industrial de tallas</li>
-        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Manejo de máquinas de coser industriales</li>
-        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Confección de uniformes escolares y laborales</li>
+        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Albañilería y estructuras básicas</li>
+        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Lectura e interpretación de planos</li>
+        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Instalaciones sanitarias y eléctricas</li>
+        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Acabados de obra y presupuestos</li>
       </ul>
       <p style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--texto-tenue);"><strong style="color: #4fc3f7;">Duración:</strong> 2 años · Técnico Medio · Validez nacional (Ley 070)</p>
     `,
-    radio: 6
+    radio: 2.5
+  },
+  {
+    id: 'carpinteria',
+    posicion: { x: 28.03, y: 7.89, z: -8.74 },
+    titulo: "Carpintería",
+    icono: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 21V8l8-5 8 5v13" /><path d="M9 21v-7h6v7M4 12h16" /></svg>`,
+    contenido: `
+      <h4 style="color: #4fc3f7; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5rem;">Sobre la carrera</h4>
+      <p style="margin-bottom: 1rem;">Especialidad en el trabajo con madera, desde el corte y ensamblaje hasta los acabados finales. Los estudiantes aprenden a fabricar muebles y estructuras de madera con técnicas tradicionales y modernas.</p>
+      <h4 style="color: #4fc3f7; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5rem;">Contenidos principales</h4>
+      <ul style="list-style: none; padding: 0; margin-bottom: 1rem;">
+        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Tipos de madera y sus propiedades</li>
+        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Técnicas de corte y ensamblaje</li>
+        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Acabados y barnices</li>
+        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Fabricación de muebles básicos</li>
+      </ul>
+      <p style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--texto-tenue);"><strong style="color: #4fc3f7;">Duración:</strong> 2 años · Técnico Medio · Validez nacional (Ley 070)</p>
+    `,
+    radio: 2.5
+  },
+  {
+    id: 'algebra',
+    posicion: { x: 10.46, y: 13.32, z: -3.60 },
+    titulo: "Refuerzos de Álgebra",
+    icono: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3v18h18" /><path d="M7 16l4-6 4 3 5-8" /></svg>`,
+    contenido: `
+      <h4 style="color: #4fc3f7; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5rem;">Sobre el curso</h4>
+      <p style="margin-bottom: 1rem;">Programa de refuerzo académico en matemáticas, enfocado en álgebra básica y avanzada. Diseñado para estudiantes que necesitan fortalecer sus habilidades matemáticas.</p>
+      <h4 style="color: #4fc3f7; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5rem;">Contenidos principales</h4>
+      <ul style="list-style: none; padding: 0; margin-bottom: 1rem;">
+        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Operaciones algebraicas básicas</li>
+        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Ecuaciones lineales y cuadráticas</li>
+        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Funciones y gráficas</li>
+        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Resolución de problemas aplicados</li>
+      </ul>
+      <p style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--texto-tenue);"><strong style="color: #4fc3f7;">Modalidad:</strong> Curso complementario · Horario flexible</p>
+    `,
+    radio: 2.5
+  },
+  {
+    id: 'plomeria',
+    posicion: { x: -16.85, y: 13.32, z: -5.60 },
+    titulo: "Plomería",
+    icono: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v6M12 22v-6M4 12h6M22 12h-6M8 8l8 8M16 8l-8 8" /></svg>`,
+    contenido: `
+      <h4 style="color: #4fc3f7; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5rem;">Sobre la carrera</h4>
+      <p style="margin-bottom: 1rem;">Formación técnica en instalación y mantenimiento de sistemas de agua potable, desagüe y gas. Los estudiantes aprenden a trabajar con diferentes tipos de tuberías y conexiones.</p>
+      <h4 style="color: #4fc3f7; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5rem;">Contenidos principales</h4>
+      <ul style="list-style: none; padding: 0; margin-bottom: 1rem;">
+        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Instalaciones de agua potable</li>
+        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Sistemas de desagüe y ventilación</li>
+        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Instalaciones de gas domiciliario</li>
+        <li style="padding-left: 1rem; border-left: 2px solid #4fc3f7; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--texto);">Mantenimiento y reparación de fugas</li>
+      </ul>
+      <p style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--texto-tenue);"><strong style="color: #4fc3f7;">Duración:</strong> 2 años · Técnico Medio · Validez nacional (Ley 070)</p>
+    `,
+    radio: 2.5
   }
 ];
 
@@ -253,7 +317,7 @@ var panelMateriaAbierto = false;
 
 function crearMarcadoresMaterias() {
   puntosMaterias.forEach(function(punto) {
-    var geometria = new THREE.SphereGeometry(0.5, 16, 16);
+    var geometria = new THREE.SphereGeometry(0.2, 16, 16);
     var material = new THREE.MeshBasicMaterial({ 
       color: 0x4fc3f7,
       transparent: true,
@@ -267,7 +331,7 @@ function crearMarcadoresMaterias() {
     scene3d.add(esfera);
     marcadoresMateriasMesh.push(esfera);
 
-    var nucleoGeo = new THREE.SphereGeometry(0.15, 8, 8);
+    var nucleoGeo = new THREE.SphereGeometry(0.06, 8, 8);
     var nucleoMat = new THREE.MeshBasicMaterial({ color: 0xffffff, depthTest: false });
     var nucleo = new THREE.Mesh(nucleoGeo, nucleoMat);
     nucleo.position.set(punto.posicion.x, punto.posicion.y, punto.posicion.z);
@@ -288,31 +352,26 @@ function animarMarcadoresMaterias() {
 }
 
 function verificarProximidadMaterias() {
-  if (!camera3d || panelHistoriaAbierto || panelMateriaAbierto) return;
-  
+  if (!camera3d) return;
   var camaraPos = camera3d.position;
   var cercano = null;
-  
   puntosMaterias.forEach(function(punto) {
     var distancia = camaraPos.distanceTo(new THREE.Vector3(punto.posicion.x, punto.posicion.y, punto.posicion.z));
-    if (distancia < punto.radio) {
-      cercano = punto;
-    }
+    if (distancia < punto.radio) cercano = punto;
   });
-  
+  if (panelMateriaAbierto && !cercano && marcadorMateriaActivo) {
+    var distanciaActual = camaraPos.distanceTo(new THREE.Vector3(marcadorMateriaActivo.posicion.x, marcadorMateriaActivo.posicion.y, marcadorMateriaActivo.posicion.z));
+    if (distanciaActual > marcadorMateriaActivo.radio * 1.5) cerrarPanelMateria();
+  }
   marcadorMateriaActivo = cercano;
 }
 
 function mostrarPanelMateria(punto) {
   if (!punto) return;
   document.getElementById('panel-materia-titulo').textContent = punto.titulo;
-  
   var html = '';
-  if (punto.icono) {
-    html += `<div class="panel-icono-materia">${punto.icono}</div>`;
-  }
+  if (punto.icono) html += `<div class="panel-icono-materia">${punto.icono}</div>`;
   html += punto.contenido;
-  
   document.getElementById('panel-materia-contenido').innerHTML = html;
   document.getElementById('info-panel-materia').classList.add('active');
   panelMateriaAbierto = true;
@@ -332,7 +391,7 @@ function cerrarPanelMateria() {
 var modoExplorador = false;
 var teclas = { w: false, a: false, s: false, d: false, q: false, e: false };
 var exploradorPos, exploradorYaw = 0, exploradorPitch = 0;
-var VEL_EXP = 0.32;
+var VEL_EXP = 0.18;
 var controlesIniciados = false;
 
 var modos = {
@@ -346,22 +405,15 @@ function actualizarCamaraVisor() {
   else if (enRecorrido) actualizarRecorrido();
   else if (autoRotarV) { anguloHV += 0.0022; updateCam(); }
   
-  // Animar marcadores
   animarMarcadoresHistoria();
   animarMarcadoresMaterias();
-  
-  // Verificar proximidad
   verificarProximidadHistoria();
   verificarProximidadMaterias();
   
-  // Actualizar prompt visual
   var prompt = document.getElementById('interaction-prompt');
   if (prompt) {
-    if (marcadorActivo || marcadorMateriaActivo) {
-      prompt.classList.add('visible');
-    } else {
-      prompt.classList.remove('visible');
-    }
+    if (marcadorActivo || marcadorMateriaActivo) prompt.classList.add('visible');
+    else prompt.classList.remove('visible');
   }
 }
 
@@ -394,14 +446,8 @@ function entrarVisor(iniciarTour) {
   if (!controlesIniciados) { controlesIniciados = true; initControlesVisor(); }
   aplicarCalidad();
   aplicarModo('dia');
-  
-  if (marcadoresHistoriaMesh.length === 0) {
-    crearMarcadoresHistoria();
-  }
-  if (marcadoresMateriasMesh.length === 0) {
-    crearMarcadoresMaterias();
-  }
-  
+  if (marcadoresHistoriaMesh.length === 0) crearMarcadoresHistoria();
+  if (marcadoresMateriasMesh.length === 0) crearMarcadoresMaterias();
   if (iniciarTour) setTimeout(iniciarRecorrido, 500);
   else reiniciarIdleV();
 }
@@ -471,14 +517,12 @@ function iniciarExplorador() {
   exploradorPos = new THREE.Vector3(camera3d.position.x, 1.7, camera3d.position.z);
   renderer3d.domElement.requestPointerLock();
   var btn = document.getElementById('btn-explorador');
-  if (btn) { btn.classList.add('is-active'); btn.textContent = '⏹ Salir (ESC)'; }
+  if (btn) { btn.classList.add('is-active'); btn.textContent = ' Salir (ESC)'; }
   document.querySelector('.canvas-controls-hint').style.display = 'flex';
   document.getElementById('visor-controles').style.pointerEvents = 'none';
   document.getElementById('btn-explorador').style.pointerEvents = 'auto';
-
   var menuWrap = document.getElementById('explorador-menu-wrap');
   if (menuWrap) menuWrap.style.display = 'flex';
-
   var ov = document.getElementById('explorador-overlay');
   if (ov) { ov.style.opacity = '1'; setTimeout(function () { ov.style.opacity = '0'; }, 4500); }
 }
@@ -489,7 +533,6 @@ function salirExplorador() {
   if (btn) { btn.classList.remove('is-active'); btn.textContent = '🚶 Explorar'; }
   document.querySelector('.canvas-controls-hint').style.display = 'none';
   document.getElementById('visor-controles').style.pointerEvents = 'auto';
-
   var menuWrap = document.getElementById('explorador-menu-wrap');
   if (menuWrap) {
     menuWrap.style.display = 'none';
@@ -501,7 +544,6 @@ function actualizarExplorador() {
   var cosY = Math.cos(exploradorYaw), sinY = Math.sin(exploradorYaw);
   var adelante = new THREE.Vector3(-sinY, 0, -cosY);
   var derecha = new THREE.Vector3(cosY, 0, -sinY);
-
   var nuevaPos = exploradorPos.clone();
 
   if (teclas.w) nuevaPos.addScaledVector(adelante, VEL_EXP);
@@ -517,10 +559,7 @@ function actualizarExplorador() {
     nuevaPos = aplicarColisionParedes(exploradorPos, nuevaPos);
     nuevaPos.y = detectarSuelo(nuevaPos);
   }
-
-  if (!teclas.e) {
-    nuevaPos.y = Math.max(ALTURA_OJOS, nuevaPos.y);
-  }
+  if (!teclas.e) nuevaPos.y = Math.max(ALTURA_OJOS, nuevaPos.y);
 
   exploradorPos.copy(nuevaPos);
   camera3d.position.copy(exploradorPos);
@@ -565,35 +604,19 @@ function initControlesVisor() {
   document.addEventListener('keydown', function (e) {
     if (!visorActivo) return;
     
-    // === MANEJO DE TECLA 'E' Y 'ESCAPE' PARA PANELES ===
     if (e.key === 'e' || e.key === 'E') {
-      if (panelHistoriaAbierto) {
-        cerrarPanelHistoria();
-      } else if (panelMateriaAbierto) {
-        cerrarPanelMateria();
-      } else if (marcadorActivo) {
-        mostrarPanelHistoria(marcadorActivo);
-      } else if (marcadorMateriaActivo) {
-        mostrarPanelMateria(marcadorMateriaActivo);
-      } else {
-        teclas.e = true; // Solo permite bajar si NO hay panel abierto ni marcador activo
-      }
+      if (panelHistoriaAbierto) { cerrarPanelHistoria(); }
+      else if (panelMateriaAbierto) { cerrarPanelMateria(); }
+      else if (marcadorActivo) { mostrarPanelHistoria(marcadorActivo); }
+      else if (marcadorMateriaActivo) { mostrarPanelMateria(marcadorMateriaActivo); }
+      else { teclas.e = true; }
       return;
     }
-    
     if (e.key === 'Escape') {
-      if (panelHistoriaAbierto) {
-        cerrarPanelHistoria();
-        return;
-      } else if (panelMateriaAbierto) {
-        cerrarPanelMateria();
-        return;
-      } else if (modoExplorador) {
-        salirExplorador();
-        return;
-      }
+      if (panelHistoriaAbierto) { cerrarPanelHistoria(); return; }
+      else if (panelMateriaAbierto) { cerrarPanelMateria(); return; }
+      else if (modoExplorador) { salirExplorador(); return; }
     }
-    // ==================================================
 
     if (e.key === 'w' || e.key === 'W' || e.key === 'ArrowUp') teclas.w = true;
     if (e.key === 's' || e.key === 'S' || e.key === 'ArrowDown') teclas.s = true;
@@ -660,19 +683,10 @@ function initControlesVisor() {
     document.addEventListener('click', function (e) { if (!pMenu.contains(e.target) && e.target !== bMenu) pMenu.classList.remove('is-open'); });
   }
 
-  // 🛠️ HERRAMIENTA DE ESCANEO: Obtener coordenadas
+  // 🛠️ HERRAMIENTA DE ESCANEO
   document.addEventListener('keydown', function (e) {
     if ((e.key === 'p' || e.key === 'P') && modoExplorador && document.pointerLockElement) {
-      var raycasterPicker = new THREE.Raycaster();
-      raycasterPicker.setFromCamera(new THREE.Vector2(0, 0), camera3d);
-      var intersects = raycasterPicker.intersectObjects(scene3d.children, true);
-      
-      if (intersects.length > 0) {
-        var p = intersects[0].point;
-        console.log(`📍 COORDENADA: { x: ${p.x.toFixed(2)}, y: ${p.y.toFixed(2)}, z: ${p.z.toFixed(2)} }`);
-      } else {
-        console.log("❌ No estás apuntando a ningún objeto del modelo.");
-      }
+      console.log(`📍 MI POSICIÓN: { x: ${camera3d.position.x.toFixed(2)}, y: ${camera3d.position.y.toFixed(2)}, z: ${camera3d.position.z.toFixed(2)} }`);
     }
   });
 }
